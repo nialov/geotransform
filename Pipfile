@@ -11,6 +11,7 @@ sphinx = "*"
 [packages]
 geopandas = "*"
 click = "*"
+geotrans = {editable = true,path = "."}
 
 [requires]
 python_version = "3.8"
