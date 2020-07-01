@@ -59,3 +59,22 @@ def test_run_transform(tmp_path: Path):
     cli.run_transform(test_inputs2, test_transform_to_type, tmp_path)
     # Test that two files exist because the output is a directory.
     assert sum([1 for _ in tmp_path.iterdir()]) == 2
+
+
+def test_command_line_integration(tmp_path):
+    """
+    Tests click functionality.
+    """
+    clirunner = CliRunner()
+    cli_args = [
+        "tests/data/KL5_tulkinta.shp",
+        "--to_type",
+        "gpkg",
+        "--output",
+        f"{tmp_path}/cli_test",
+    ]
+    result = clirunner.invoke(cli.main, cli_args)
+    # Check that exit code is 0 (i.e. ran succesfully.)
+    assert result.exit_code == 0
+    # Checks if output path is printed
+    assert str(tmp_path) in result.output

@@ -121,22 +121,3 @@ def test_load_filegeodatabase(tmp_path):
     transform.save_files(
         geodataframes, layer_names, filenames, savefile_driver=GEOPACKAGE_DRIVER
     )
-
-
-def test_command_line_integration(tmp_path):
-    """
-    Tests click functionality.
-    """
-    clirunner = CliRunner()
-    cli_args = [
-        "tests/data/KL5_tulkinta.shp",
-        "--to_type",
-        "gpkg",
-        "--output",
-        f"{tmp_path}/cli_test",
-    ]
-    result = clirunner.invoke(cli.main, cli_args)
-    # Check that exit code is 0 (i.e. ran succesfully.)
-    assert result.exit_code == 0
-    # Checks if output path is printed
-    assert str(tmp_path) in result.output
