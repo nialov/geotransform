@@ -6,3 +6,6 @@ README.md
 dev.py
 dev
 geotrans.egg-info
+.tox
+docs/_build
+.esri.gz
