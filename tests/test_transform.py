@@ -11,9 +11,6 @@ from geotrans.transform import (
     SHAPEFILE_DRIVER,
     FILEGEODATABASE_DRIVER,
 )
-from geotrans import cli
-
-from click.testing import CliRunner
 from pathlib import Path
 import geopandas as gpd
 import fiona
