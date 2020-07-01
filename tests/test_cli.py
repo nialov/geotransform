@@ -13,11 +13,11 @@ from click.testing import CliRunner
 from geotrans import cli
 from geotrans import transform
 
-test_inputs = ["tests/data/OG1_tulkinta_filtered_5m.gpkg"]
-test_inputs2 = [
+test_inputs = ("tests/data/OG1_tulkinta_filtered_5m.gpkg",)
+test_inputs2 = (
     "tests/data/OG1_tulkinta_filtered_5m.gpkg",
     "tests/data/OG4_fractures_ML_filtered_5m.gpkg",
-]
+)
 test_transform_to_type = transform.GEOPACKAGE
 test_output = "test.gpkg"
 

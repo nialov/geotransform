@@ -11,6 +11,7 @@ from typing import List, Tuple
 
 import fiona
 import geopandas as gpd
+import click
 
 GEOPACKAGE = "gpkg"
 SHAPEFILE = "shp"
@@ -29,7 +30,7 @@ driver_dict = {
 
 def load_file(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
     """
-    Takes a single geodata filepath string, determines its type and returns a 
+    Takes a single geodata filepath string, determines its type and returns a
     list of GeoDataFrames and a list of layer
     names that consist of all file data.
     """
@@ -142,6 +143,9 @@ def save_files(
     If user inputted no filenames: the filename will be made from layer name 
     before this function.
     """
+    if savefile_driver == GEOPACKAGE_DRIVER:
+        geodataframes = validate_loaded_geodataframes(geodataframes, layer_names)
+
     if len(geodataframes) > 1 and len(filenames) == 1:
         # Multiple layers to single file.
         # Make sure geodatatype can handle multiple layers.
@@ -156,4 +160,23 @@ def save_files(
             geodataframes, layer_names, filenames
         ):
             geodataframe.to_file(filename, layer=layer_name, driver=savefile_driver)
+
+
+def validate_loaded_geodataframes(geodataframes, layer_names):
+    """
+    Some columns (namely FID) cause issues when saving to geopackage.
+    Currently these columns are removed to remove the issue.
+    """
+    for geodataframe, layer_name in zip(geodataframes, layer_names):
+        fid = "fid"
+        if fid in geodataframe.columns:
+            geodataframe.drop(columns=fid, inplace=True)
+            click.echo(
+                click.style(
+                    f"Columns of layer: {layer_name} had to be modified.\n"
+                    f"Field with name: {fid} was removed.",
+                    fg="red",
+                )
+            )
+    return geodataframes
 

@@ -18,19 +18,40 @@ from geotrans.transform import SHAPEFILE, GEOPACKAGE, FILEGEODATABASE, driver_di
 @click.argument(
     "inputs", type=click.Path(exists=True, readable=True, resolve_path=True), nargs=-1,
 )
-@click.option("transform_to_type", "--to_type", type=str, default=GEOPACKAGE)
 @click.option(
-    "output", "--output", type=click.Path(writable=True, file_okay=True, dir_okay=True)
+    "transform_to_type",
+    "--to_type",
+    type=str,
+    default=GEOPACKAGE,
+    help="The spatial geodata filetype to transform to. Defaults to Geopackage.",
 )
+@click.option(
+    "output",
+    "--output",
+    type=click.Path(writable=True, file_okay=True, dir_okay=True,),
+    help="The output file or directory. "
+    "Filename suffix is appended based on --to_type if missing from input.",
+)
+@click.version_option()
 def main(inputs, transform_to_type, output):
     """
-    A variable amount of input filenames are accepted, the type to transfrom the input to 
-    can be given and an output file or output directory can be given.
-    If the output is a file: all layers are saved to that file if the given transform_to_type 
+    A tool for transforming between spatial geodata filetypes
+    (e.g. ESRI Shapefile, Geopackage).
+
+    Inputs = File or files to transform to a type.
+    Gathers all layers from all input files to the given output.
+
+    A variable amount of input filenames are accepted, the type to transfrom
+    the input to can be given and an output file or output directory can be
+    given.
+
+    If the output is a file:
+    all layers are saved to that file if the given transform_to_type
     supports multiple layers.
     If the output is a directory all input layers are saved to that directory based
-    on their layer name.
+    on their layer name and the given --to_type parameter.
     """
+
     validate_inputs(inputs, transform_to_type, output=None)
     run_transform(inputs, transform_to_type, output)
 
@@ -82,6 +103,14 @@ def run_transform(inputs, transform_to_type, output):
 
 
 def validate_inputs(inputs, transform_to_type: str, output: str) -> None:
+    if not isinstance(inputs, tuple) or len(inputs) == 0:
+        try:
+            current_context = click.get_current_context()
+            current_context.fail(
+                "No inputs were given. Add --help to print help message."
+            )
+        except RuntimeError:
+            print("No click runtime detected -> Script has been called from python.")
     if transform_to_type not in [
         SHAPEFILE,
         GEOPACKAGE,
@@ -100,5 +129,6 @@ def finished(output):
     Finish up by printing full path to output(s).
     """
     # TODO: click echo
-    print(f"Output(s) were written to {output}.")
+    # print(f"Output(s) were written to {output}.")
+    click.echo(click.style(f"Layer data was written to {output}.", fg="green"))
 

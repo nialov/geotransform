@@ -1,9 +1,22 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name="geotrans",
     version="0.1",
+    author="Nikolas Ovaskainen",
+    author_email="nikolasovaskainen@gmail.com",
+    description="Fast geodata filetype transformations.",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     packages=find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
     include_package_data=True,
     install_requires=["click", "geopandas"],
     entry_points="""
@@ -11,20 +24,3 @@ setup(
         geotrans=geotrans.cli:main
     """,
 )
-# cat: pipfile: No such file or directory
-# [[source]]
-# name = "pypi"
-# url = "https://pypi.org/simple"
-# verify_ssl = true
-
-# [dev-packages]
-# hypothesis = "*"
-# pytest = "*"
-# sphinx = "*"
-
-# [packages]
-# geopandas = "*"
-# click = "*"
-
-# [requires]
-# python_version = "3.8"

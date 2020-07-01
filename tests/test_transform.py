@@ -16,7 +16,7 @@ from pathlib import Path
 import geopandas as gpd
 import fiona
 
-test_multilayer_file_path = Path("tests/data/OG1_tulkinta_filtered_5m.gpkg")
+test_multilayer_file_path = Path("tests/data/Two_Layer_Geopackage_OG6_OG7.gpkg")
 test_singlelayer_file_path = Path("tests/data/branches_cropped_Domain_IIId.shp")
 test_dir_path = Path("tests/data")
 test_invalid_path = Path("tests/datarrr")
@@ -65,15 +65,30 @@ def test_load_singlelayer():
         assert isinstance(name, str)
 
 
-def test_save_files(tmp_path):
+def test_single_save_file(tmp_path):
     # tmp_path is a temporary Path directory
-    geodataframes, layer_names = transform.load_multilayer(test_multilayer_file_path)
+    geodataframes, layer_names = transform.load_singlelayer(test_singlelayer_file_path)
     filenames = [tmp_path / test_single_file_save_path]
+    try:
+        transform.save_files(
+            geodataframes,
+            layer_names,
+            savefile_driver=transform.GEOPACKAGE_DRIVER,
+            filenames=filenames,
+        )
+    except fiona.errors.SchemaError:
+        print([gdf.columns for gdf in geodataframes])
+        raise
+
+
+def test_multi_layer_save(tmp_path):
+    geodataframes, layer_names = transform.load_multilayer(test_multilayer_file_path)
+    assert len(geodataframes) == len(layer_names) == 2
+    filenames = []
+    for layer_name in layer_names:
+        filenames.append(tmp_path / f"{layer_name}.shp")
     transform.save_files(
-        geodataframes,
-        layer_names,
-        savefile_driver=transform.GEOPACKAGE_DRIVER,
-        filenames=filenames,
+        geodataframes, layer_names, filenames, savefile_driver=SHAPEFILE_DRIVER
     )
 
 
