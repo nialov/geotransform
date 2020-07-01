@@ -21,9 +21,10 @@ from geotrans.transform import SHAPEFILE, GEOPACKAGE, FILEGEODATABASE, driver_di
 @click.option(
     "transform_to_type",
     "--to_type",
-    type=str,
+    type=click.Choice([SHAPEFILE, GEOPACKAGE], case_sensitive=False),
     default=GEOPACKAGE,
     help="The spatial geodata filetype to transform to. Defaults to Geopackage.",
+    show_default=True,
 )
 @click.option(
     "output",
