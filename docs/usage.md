@@ -34,7 +34,3 @@ geodataframes, layer_names = load_file(filepath)
 # Save acquired geodataframe and layer
 save_files(geodataframes, layer_names, [Path("output_file.shp")], "ESRI Shapefile")
 ~~~
-    geodataframes: List[gpd.GeoDataFrame],
-    layer_names: List[str],
-    filenames: List[Path],
-    savefile_driver: str,

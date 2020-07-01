@@ -16,8 +16,6 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath("."))
 
-extensions = ["recommonmark"]
-
 # -- Project information -----------------------------------------------------
 
 project = "geotransform"
@@ -30,10 +28,19 @@ release = "0.1"
 
 # -- General configuration ---------------------------------------------------
 
+import recommonmark
+
+extensions = ["recommonmark"]
+
+# Add .md markdown files as sources.
+source_suffix = {
+    ".md": "markdown",
+}
+master_doc = "index"
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

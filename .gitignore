@@ -8,3 +8,4 @@ geotrans.egg-info
 .tox
 docs/_build
 .esri.gz
+.coverage
