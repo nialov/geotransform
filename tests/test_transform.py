@@ -21,6 +21,8 @@ test_singlelayer_file_path = Path("tests/data/branches_cropped_Domain_IIId.shp")
 test_dir_path = Path("tests/data")
 test_invalid_path = Path("tests/datarrr")
 
+test_filegeodatabase_file_path = Path("tests/data/OG1_faults.gdb")
+
 test_single_file_save_path = Path("i_hope_this_is_saved.gpkg")
 
 
@@ -86,7 +88,7 @@ def test_multi_layer_save(tmp_path):
     assert len(geodataframes) == len(layer_names) == 2
     filenames = []
     for layer_name in layer_names:
-        filenames.append(tmp_path / f"{layer_name}.shp")
+        filenames.append(tmp_path / f"{layer_name}_test_multi_layer.shp")
     transform.save_files(
         geodataframes, layer_names, filenames, savefile_driver=SHAPEFILE_DRIVER
     )
@@ -95,4 +97,26 @@ def test_multi_layer_save(tmp_path):
 def test_driver_strings():
     for driver in [GEOPACKAGE_DRIVER, SHAPEFILE_DRIVER, FILEGEODATABASE_DRIVER]:
         assert driver in fiona.supported_drivers
+
+
+def test_load_filegeodatabase(tmp_path):
+    """
+    Tests loading a filegeodatabase.
+    """
+    geodataframes, layer_names = transform.load_multilayer(
+        test_filegeodatabase_file_path
+    )
+    assert len(geodataframes) == len(layer_names)
+    filenames = []
+    for layer_name in layer_names:
+        filenames.append(tmp_path / f"{layer_name}_test_filegeodatabase.shp")
+    # Save to multiple shapefiles
+    transform.save_files(
+        geodataframes, layer_names, filenames, savefile_driver=SHAPEFILE_DRIVER
+    )
+    # Save same files to a single geopackage
+    filenames = [tmp_path / f"saving_filegeodatabase.gpkg"]
+    transform.save_files(
+        geodataframes, layer_names, filenames, savefile_driver=GEOPACKAGE_DRIVER
+    )
 
