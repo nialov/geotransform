@@ -8,7 +8,7 @@ setup(
     version="0.1",
     author="Nikolas Ovaskainen",
     author_email="nikolasovaskainen@gmail.com",
-    description="Fast geodata filetype transformations.",
+    description="Fast geodata filetype transformations using geopandas.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
