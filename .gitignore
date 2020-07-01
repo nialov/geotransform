@@ -2,7 +2,6 @@ __pycache__
 */__pycache__
 **/__pycache__
 .mypy_cache
-README.md
 dev.py
 dev
 geotrans.egg-info
