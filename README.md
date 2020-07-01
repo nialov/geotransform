@@ -12,7 +12,7 @@ Currently supports:
 
 * [GeoPackages](https://www.geopackage.org/)
 * [Esri Shapefiles](https://www.esri.com/library/whitepapers/pdfs/shapefile.pdf)
-* [File Geodatabases](https://desktop.arcgis.com/en/arcmap/10.3/manage-data/administer-file-gdbs/file-geodatabases.htm)
+* [File Geodatabases](https://desktop.arcgis.com/en/arcmap/10.3/manage-data/administer-file-gdbs/file-geodatabases.htm) *Read only*
 
 ## Dependencies
 
