@@ -1,14 +1,36 @@
 # Module installation
 
-## From source
+## From source into pipenv
 
-Pure pip:
-
-TODO:
+* Requires Python >3.7 installed with pipenv
+  [pipenv](https://pipenv.pypa.io/en/latest/)
 
 ~~~bash
-git clone www.todo.com
+git clone https://github.com/nialov/geotransform.git
 cd geotransform
-pip install .
+pipenv install
+pipenv shell
 ~~~
 
+If if you want to run tests or make documentation add --dev after pipenv
+install. tox runs the test suite and makes documentation!
+
+~~~bash
+pipenv install --dev
+pipenv shell
+tox
+~~~
+
+Script now accessible as geotrans inside the pipenv
+
+~~~bash
+geotrans --help
+~~~
+
+## Install into your Python environment of choice with pip
+
+~~~bash
+git clone https://github.com/nialov/geotransform.git
+cd geotransform
+pip3 install .
+~~~

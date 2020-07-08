@@ -33,13 +33,35 @@
             
   <div class="section" id="module-installation">
 <h1>Module installation<a class="headerlink" href="#module-installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="from-source">
-<h2>From source<a class="headerlink" href="#from-source" title="Permalink to this headline">¶</a></h2>
-<p>Pure pip:</p>
-<p>TODO:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone www.todo.com
+<div class="section" id="from-source-into-pipenv">
+<h2>From source into pipenv<a class="headerlink" href="#from-source-into-pipenv" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Requires Python &gt;3.7 installed with pipenv
+<a class="reference external" href="https://pipenv.pypa.io/en/latest/">pipenv</a></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/nialov/geotransform.git
 <span class="nb">cd</span> geotransform
-pip install .
+pipenv install
+pipenv shell
+</pre></div>
+</div>
+<p>If if you want to run tests or make documentation add –dev after pipenv
+install. tox runs the test suite and makes documentation!</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pipenv install --dev
+pipenv shell
+tox
+</pre></div>
+</div>
+<p>Script now accessible as geotrans inside the pipenv</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geotrans --help
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-into-your-python-environment-of-choice-with-pip">
+<h2>Install into your Python environment of choice with pip<a class="headerlink" href="#install-into-your-python-environment-of-choice-with-pip" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/nialov/geotransform.git
+<span class="nb">cd</span> geotransform
+pip3 install .
 </pre></div>
 </div>
 </div>
