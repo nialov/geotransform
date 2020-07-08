@@ -5,7 +5,7 @@
 * Command line utility for quick transformations between geodata/spatial
   filetypes.
 * Python functions with documentation for direct usage.
-* Cross-platform due to usage of Python pathlib to handle filepaths.
+* Uses Python pathlib for cross-platform path handling.
 
 ## Support
 

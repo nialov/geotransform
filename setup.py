@@ -19,6 +19,8 @@ setup(
     ],
     include_package_data=True,
     install_requires=["click", "geopandas"],
+    test_require=["pytest", "sphinx", "recommonmark"],
+    python_requires=">=3.7",
     entry_points="""
         [console_scripts]
         geotrans=geotrans.cli:main
