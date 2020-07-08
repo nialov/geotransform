@@ -2,7 +2,7 @@
 
 ## From source into pipenv
 
-* Requires Python >3.7 installed with pipenv
+* Requires Python >3.7 installed with
   [pipenv](https://pipenv.pypa.io/en/latest/)
 
 ~~~bash
