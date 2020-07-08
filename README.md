@@ -1,4 +1,4 @@
-# Geotransformations Python command line utility
+# Geotransformations Python Command Line Utility
 
 ## Features
 
