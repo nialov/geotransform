@@ -21,7 +21,7 @@ All main functions in charge of loading and saving geodata files are
 exposed in the transform.py file in the geotrans package.
 
 ~~~python
-from geotrans.transform import load_file, save_files
+from geotrans.transform import load_file, save_files, SHAPEFILE_DRIVER
 
 # Your geodata file
 filepath = "input_file.gpkg"
@@ -32,5 +32,5 @@ geodataframes, layer_names = load_file(filepath)
 
 # Assuming geopackage contained only one layer ->
 # Save acquired geodataframe and layer
-save_files(geodataframes, layer_names, [Path("output_file.shp")], "ESRI Shapefile")
+save_files(geodataframes, layer_names, [Path("output_file.shp")], SHAPEFILE_DRIVER)
 ~~~

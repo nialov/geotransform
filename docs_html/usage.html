@@ -49,7 +49,7 @@ shapefiles into a given directory:</p>
 <h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
 <p>All main functions in charge of loading and saving geodata files are
 exposed in the transform.py file in the geotrans package.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geotrans.transform</span> <span class="kn">import</span> <span class="n">load_file</span><span class="p">,</span> <span class="n">save_files</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geotrans.transform</span> <span class="kn">import</span> <span class="n">load_file</span><span class="p">,</span> <span class="n">save_files</span><span class="p">,</span> <span class="n">SHAPEFILE_DRIVER</span>
 
 <span class="c1"># Your geodata file</span>
 <span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;input_file.gpkg&quot;</span>
@@ -60,7 +60,7 @@ exposed in the transform.py file in the geotrans package.</p>
 
 <span class="c1"># Assuming geopackage contained only one layer -&gt;</span>
 <span class="c1"># Save acquired geodataframe and layer</span>
-<span class="n">save_files</span><span class="p">(</span><span class="n">geodataframes</span><span class="p">,</span> <span class="n">layer_names</span><span class="p">,</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;output_file.shp&quot;</span><span class="p">)],</span> <span class="s2">&quot;ESRI Shapefile&quot;</span><span class="p">)</span>
+<span class="n">save_files</span><span class="p">(</span><span class="n">geodataframes</span><span class="p">,</span> <span class="n">layer_names</span><span class="p">,</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;output_file.shp&quot;</span><span class="p">)],</span> <span class="n">SHAPEFILE_DRIVER</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
