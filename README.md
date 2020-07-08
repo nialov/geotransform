@@ -1,8 +1,9 @@
-# Geotransformations command line utility
+# Geotransformations Python command line utility
 
 ## Features
 
-* Command line utility for quick transformations between geodata filetypes.
+* Command line utility for quick transformations between geodata/spatial
+  filetypes.
 * Python functions with documentation for direct usage.
 * Cross-platform due to usage of Python pathlib to handle filepaths.
 
@@ -11,8 +12,11 @@
 Currently supports:
 
 * [GeoPackages](https://www.geopackage.org/)
-* [Esri Shapefiles](https://www.esri.com/library/whitepapers/pdfs/shapefile.pdf)
-* [File Geodatabases](https://desktop.arcgis.com/en/arcmap/10.3/manage-data/administer-file-gdbs/file-geodatabases.htm) *Read only*
+* [Esri
+  Shapefiles](https://www.esri.com/library/whitepapers/pdfs/shapefile.pdf)
+* [File
+  Geodatabases](https://desktop.arcgis.com/en/arcmap/10.3/manage-data/administer-file-gdbs/file-geodatabases.htm)
+  *Read only*
 
 ## Dependencies
 
