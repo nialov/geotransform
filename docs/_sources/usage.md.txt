@@ -2,6 +2,14 @@
 
 ## Command line
 
+Run 
+
+~~~bash
+geotrans --help
+~~~
+
+to print the command line help for the utility.
+
 To transform from a geopackage file with a single layer to an ESRI shapefile:
 
 ~~~bash
