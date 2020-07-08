@@ -13,14 +13,14 @@ to print the command line help for the utility.
 To transform from a geopackage file with a single layer to an ESRI shapefile:
 
 ~~~bash
-geotransform input_file.gpkg --to_type shp --output output_file.shp
+geotrans input_file.gpkg --to_type shp --output output_file.shp
 ~~~
 
 To transform from a geopackage file with multiple layers to multiple ESRI
 shapefiles into a given directory:
 
 ~~~bash
-geotransform input_file.gpkg --to_type shp --output output_dir
+geotrans input_file.gpkg --to_type shp --output output_dir
 ~~~
 
 ## Python
