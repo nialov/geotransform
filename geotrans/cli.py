@@ -1,8 +1,8 @@
 """
 File: cli.py
-Author: yourname
-Email: yourname@email.com
-Github: https://github.com/yourname
+Author: nialov
+Email: nialov@utu.fi
+Github: https://github.com/nialov
 Description: Command line integration of geotransfrom.
 """
 from typing import Iterable
