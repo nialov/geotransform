@@ -9,11 +9,12 @@ pytest = "*"
 sphinx = "*"
 recommonmark = "*"
 tox = "*"
+pipenv-setup = "*"
+geotrans = {editable = true,path = "."}
 
 [packages]
 geopandas = "*"
 click = "*"
-geotrans = {editable = true,path = "."}
 
 [requires]
 python_version = "3.8"
