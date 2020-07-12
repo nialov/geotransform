@@ -55,9 +55,10 @@ shapefiles into a given directory:</p>
 <p>All main functions in charge of loading and saving geodata files are
 exposed in the transform.py file in the geotrans package.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geotrans.transform</span> <span class="kn">import</span> <span class="n">load_file</span><span class="p">,</span> <span class="n">save_files</span><span class="p">,</span> <span class="n">SHAPEFILE_DRIVER</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1"># Your geodata file</span>
-<span class="n">filepath</span> <span class="o">=</span> <span class="s2">&quot;input_file.gpkg&quot;</span>
+<span class="n">filepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;input_file.gpkg&quot;</span><span class="p">)</span>
 
 <span class="c1"># load_file returns a single or multiple geodataframes depending</span>
 <span class="c1"># on how many layers are in the file.</span>
@@ -122,7 +123,7 @@ exposed in the transform.py file in the geotrans package.</p>
       &copy;2020, Nikolas Ovaskainen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

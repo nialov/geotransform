@@ -13,7 +13,8 @@ pipenv shell
 ~~~
 
 If if you want to run tests or make documentation add --dev after pipenv
-install. tox runs the test suite and makes documentation!
+install. tox runs the test suite, makes documentation and syncs Pipfile
+-> setup.py files.
 
 ~~~bash
 pipenv install --dev
