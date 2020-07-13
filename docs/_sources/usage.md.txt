@@ -30,9 +30,10 @@ exposed in the transform.py file in the geotrans package.
 
 ~~~python
 from geotrans.transform import load_file, save_files, SHAPEFILE_DRIVER
+from pathlib import Path
 
 # Your geodata file
-filepath = "input_file.gpkg"
+filepath = Path("input_file.gpkg")
 
 # load_file returns a single or multiple geodataframes depending
 # on how many layers are in the file.
