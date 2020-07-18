@@ -31,7 +31,7 @@ from geotrans.transform import SHAPEFILE, GEOPACKAGE, FILEGEODATABASE, driver_di
     "--output",
     type=click.Path(writable=True, file_okay=True, dir_okay=True,),
     help="The output file or directory. "
-    "Filename suffix is appended based on --to_type if missing from input.",
+    "Filename suffix is appended based on --to_type if missing from output.",
 )
 @click.version_option()
 def main(inputs, transform_to_type, output):
@@ -97,8 +97,8 @@ def run_transform(inputs, transform_to_type, output):
         finished(output)
     else:
         raise NotImplementedError(
-            "Command line inputs did not match."
-            "Implemented functionality.\n"
+            "Command line inputs did not match "
+            "implemented functionality.\n"
             f"{inputs, transform_to_type, output}"
         )
 
