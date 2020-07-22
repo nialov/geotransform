@@ -10,7 +10,7 @@ sphinx = "*"
 recommonmark = "*"
 tox = "*"
 pipenv-setup = "*"
-geotrans = {editable = true,path = "."}
+sphinx-autodoc-typehints = "*"
 
 [packages]
 geopandas = "*"
