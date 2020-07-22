@@ -1,8 +1,4 @@
 """
-File: cli.py
-Author: nialov
-Email: nialov@utu.fi
-Github: https://github.com/nialov
 Description: Command line integration of geotransfrom.
 """
 from typing import Iterable

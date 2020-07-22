@@ -1,8 +1,4 @@
 """
-File: transform.py
-Author: nialov
-Email: nikolasovaskainen@gmail.com
-Github: https://github.com/nialov
 Description: Module in charge of all loading and saving.
 """
 

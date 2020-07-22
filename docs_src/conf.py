@@ -30,11 +30,12 @@ release = "0.1"
 
 import recommonmark
 
-extensions = ["recommonmark"]
+extensions = ["recommonmark", "sphinx.ext.autodoc", "sphinx_autodoc_typehints"]
 
 # Add .md markdown files as sources.
 source_suffix = {
     ".md": "markdown",
+    ".rst": "restructuredtext",
 }
 master_doc = "index"
 

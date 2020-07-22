@@ -1,8 +1,4 @@
 """
-File: test_transform.py
-Author: nialov
-Email: nikolasovaskainen@gmail.com
-Github: https://github.com/nialov
 Description: pytests for transform.py
 """
 from geotrans import transform

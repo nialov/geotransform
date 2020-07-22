@@ -1,8 +1,4 @@
 """
-File: test_cli.py
-Author: nialov
-Email: nikolasovaskainen@gmail.com
-Github: https://github.com/nialov
 Description: pytests for cli.py
 """
 

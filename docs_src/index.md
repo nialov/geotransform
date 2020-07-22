@@ -10,4 +10,5 @@ file.
 * [Homepage](https://github.com/nialov/geotransform)
 * [Installation](installation.md)
 * [Usage](usage.md)
+* [Apidoc](apidoc/geotrans)
 
