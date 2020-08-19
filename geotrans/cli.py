@@ -7,7 +7,13 @@ import click
 from pathlib import Path
 
 import geotrans.transform as transform
-from geotrans.transform import SHAPEFILE, GEOPACKAGE, FILEGEODATABASE, driver_dict
+from geotrans.transform import (
+    SHAPEFILE,
+    GEOPACKAGE,
+    FILEGEODATABASE,
+    GEOJSON,
+    driver_dict,
+)
 
 
 @click.command()
@@ -17,7 +23,7 @@ from geotrans.transform import SHAPEFILE, GEOPACKAGE, FILEGEODATABASE, driver_di
 @click.option(
     "transform_to_type",
     "--to_type",
-    type=click.Choice([SHAPEFILE, GEOPACKAGE], case_sensitive=False),
+    type=click.Choice([SHAPEFILE, GEOPACKAGE, GEOJSON], case_sensitive=False),
     default=GEOPACKAGE,
     help="The spatial geodata filetype to transform to. Defaults to Geopackage.",
     show_default=True,
@@ -30,7 +36,7 @@ from geotrans.transform import SHAPEFILE, GEOPACKAGE, FILEGEODATABASE, driver_di
     "Filename suffix is appended based on --to_type if missing from output.",
 )
 @click.version_option()
-def main(inputs, transform_to_type, output):
+def main(inputs: tuple, transform_to_type: str, output: str):
     """
     A tool for transforming between spatial geodata filetypes
     (e.g. ESRI Shapefile, Geopackage).
@@ -49,7 +55,7 @@ def main(inputs, transform_to_type, output):
     on their layer name and the given --to_type parameter.
     """
 
-    validate_inputs(inputs, transform_to_type, output=None)
+    validate_inputs(inputs, transform_to_type, output="")
     run_transform(inputs, transform_to_type, output)
 
 
@@ -62,20 +68,19 @@ def run_transform(inputs, transform_to_type, output):
         gdfs, lnms = transform.load_file(Path(input_filename))
         geodataframes.extend(gdfs)
         layer_names.extend(lnms)
-    if transform_to_type in [GEOPACKAGE, SHAPEFILE] and Path(output).exists():
-        # Save individual geopackages or shapefiles to a given directory.
+    if transform_to_type in transform.SAVE_CAPABLE and Path(output).exists():
+        # Save individual geopackages, geojsons or shapefiles to a given directory.
         save_paths = []
         for layer_name in layer_names:
             save_paths.append(Path(output) / Path(f"{layer_name}.{transform_to_type}"))
 
-        transform.save_files(
-            geodataframes,
-            layer_names,
-            save_paths,
-            savefile_driver=driver_dict[transform_to_type],
-        )
+        transform.save_files(geodataframes, layer_names, save_paths, transform_to_type)
         finished(output)
-    elif transform_to_type in [GEOPACKAGE] and not Path(output).is_dir():
+    elif (
+        transform_to_type in transform.MULTILAYER_CAPABLE
+        and transform_to_type in transform.SAVE_CAPABLE
+        and not Path(output).is_dir()
+    ):
         # Save a single geopackage output file with multiple layers
         # (if there are multiple layers in inputs).
         # Make sure file suffix is in the saved file.
@@ -85,16 +90,13 @@ def run_transform(inputs, transform_to_type, output):
             else f"{output}.{transform_to_type}"
         )
         transform.save_files(
-            geodataframes,
-            layer_names,
-            [Path(output)],
-            savefile_driver=driver_dict[transform_to_type],
+            geodataframes, layer_names, [Path(output)], transform_to_type
         )
         finished(output)
     else:
         raise NotImplementedError(
             "Command line inputs did not match "
-            "implemented functionality.\n"
+            "currently implemented functionality.\n"
             f"{inputs, transform_to_type, output}"
         )
 

@@ -12,16 +12,24 @@ import click
 GEOPACKAGE = "gpkg"
 SHAPEFILE = "shp"
 FILEGEODATABASE = "gdb"
+GEOJSON = "geojson"
 
 GEOPACKAGE_DRIVER = "GPKG"
 SHAPEFILE_DRIVER = "ESRI Shapefile"
 FILEGEODATABASE_DRIVER = "OpenFileGDB"
+GEOJSON_DRIVER = "GeoJSON"
 
 driver_dict = {
     GEOPACKAGE: GEOPACKAGE_DRIVER,
     SHAPEFILE: SHAPEFILE_DRIVER,
     FILEGEODATABASE: FILEGEODATABASE_DRIVER,
+    GEOJSON: GEOJSON_DRIVER,
 }
+MULTILAYER_CAPABLE = [GEOPACKAGE, FILEGEODATABASE]
+SINGLELAYER_CAPABLE = [SHAPEFILE, GEOJSON]
+SAVE_CAPABLE = [GEOPACKAGE, SHAPEFILE, GEOJSON]
+FILETYPES = [GEOPACKAGE, SHAPEFILE, FILEGEODATABASE, GEOJSON]
+SUPPORTS_LAYER_NAMES = [GEOPACKAGE, SHAPEFILE, FILEGEODATABASE]
 
 
 def load_file(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
@@ -34,20 +42,17 @@ def load_file(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
     check_file(filepath)
     # Determine geodata type
     filetype = determine_filetype(filepath)
-    if filetype == GEOPACKAGE:
+    if filetype in MULTILAYER_CAPABLE:
         # Can contain multiple layers.
         geodataframes, layer_names = load_multilayer(filepath)
-    elif filetype == FILEGEODATABASE:
-        # Can contain multiple layers.
-        geodataframes, layer_names = load_multilayer(filepath)
-    elif filetype == SHAPEFILE:
+    elif filetype in SINGLELAYER_CAPABLE:
         # Only containts a single layer
-        geodataframes, layer_names = load_singlelayer(filepath)
+        geodataframes, layer_names = load_singlelayer(filepath, filetype)
         assert len(geodataframes) + len(layer_names) == 2
     else:
         # TODO: More supported types
         raise NotImplementedError(
-            "Only geopackages, filegeodatabases"
+            "Only geopackages, filegeodatabases, geojsons"
             "and shapefiles are currently supported"
         )
     return geodataframes, layer_names
@@ -73,17 +78,13 @@ def determine_filetype(filepath: Path) -> str:
     """
     Takes a single geodata filepath and determines its geodata type.
     """
-    if GEOPACKAGE in str(filepath.suffix):
-        return GEOPACKAGE
-    elif SHAPEFILE in str(filepath.suffix):
-        return SHAPEFILE
-    elif FILEGEODATABASE in str(filepath.suffix):
-        return FILEGEODATABASE
-    else:
-        raise TypeError(
-            "Filepath was not recognized or was not an implemented type. \n"
-            f"Filepath: {filepath}"
-        )
+    for filetype in FILETYPES:
+        if filetype in str(filepath.suffix):
+            return filetype
+    raise TypeError(
+        "Filepath was not recognized or was not an implemented type. \n"
+        f"Filepath: {filepath}"
+    )
 
 
 def load_multilayer(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
@@ -107,7 +108,9 @@ def load_multilayer(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
     return geodataframes, layer_names
 
 
-def load_singlelayer(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
+def load_singlelayer(
+    filepath: Path, filetype: str
+) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
     """
     Load a single layer from a geodata file.
     """
@@ -115,7 +118,17 @@ def load_singlelayer(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]
     layer_names = []
     geodataframes.append(gpd.read_file(filepath))
     # TODO: Opening twice, inefficient.
-    layer_names.append(fiona.open(filepath).name)
+    if filetype in SUPPORTS_LAYER_NAMES:
+        try:
+            layer_names.append(fiona.open(filepath).name)
+        except ValueError:
+            click.echo(
+                f"Filetype {filetype} errored out when trying to get" "layer name."
+            )
+            raise
+    else:
+        layer_names.append(filepath.name)
+
     return geodataframes, layer_names
 
 
@@ -123,7 +136,7 @@ def save_files(
     geodataframes: List[gpd.GeoDataFrame],
     layer_names: List[str],
     filenames: List[Path],
-    savefile_driver: str,
+    transform_to_type: str,
 ) -> None:
     """
     The user can save his geodata files with multiple different options.
@@ -139,6 +152,7 @@ def save_files(
     If user inputted no filenames: the filename will be made from layer name 
     before this function.
     """
+    savefile_driver = driver_dict[transform_to_type]
     if savefile_driver == GEOPACKAGE_DRIVER:
         geodataframes = validate_loaded_geodataframes(geodataframes, layer_names)
 
@@ -155,7 +169,10 @@ def save_files(
         for geodataframe, layer_name, filename in zip(
             geodataframes, layer_names, filenames
         ):
-            geodataframe.to_file(filename, layer=layer_name, driver=savefile_driver)
+            if transform_to_type in SUPPORTS_LAYER_NAMES:
+                geodataframe.to_file(filename, layer=layer_name, driver=savefile_driver)
+            else:
+                geodataframe.to_file(filename, driver=savefile_driver)
 
 
 def validate_loaded_geodataframes(geodataframes, layer_names):

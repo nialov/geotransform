@@ -17,8 +17,10 @@ test_dir_path = Path("tests/data")
 test_invalid_path = Path("tests/datarrr")
 
 test_filegeodatabase_file_path = Path("tests/data/OG1_faults.gdb")
+test_geojson_file_save_path = Path("tests/data/Hastholmen_LiDAR_lineaments.geojson")
 
 test_single_file_save_path = Path("i_hope_this_is_saved.gpkg")
+test_single_file_save_path_geojson = Path("i_hope_this_is_saved.geojson")
 
 
 def test_check_file():
@@ -51,7 +53,10 @@ def test_load_multilayer():
 
 
 def test_load_singlelayer():
-    geodataframes, layer_names = transform.load_singlelayer(test_singlelayer_file_path)
+    geodataframes, layer_names = transform.load_singlelayer(
+        test_singlelayer_file_path,
+        transform.determine_filetype(test_singlelayer_file_path),
+    )
 
     assert isinstance(geodataframes, list)
     assert isinstance(layer_names, list)
@@ -62,16 +67,53 @@ def test_load_singlelayer():
         assert isinstance(name, str)
 
 
+def test_load_geojson():
+    geodataframes, layer_names = transform.load_singlelayer(
+        test_geojson_file_save_path,
+        transform.determine_filetype(test_geojson_file_save_path),
+    )
+
+    assert isinstance(geodataframes, list)
+    assert isinstance(layer_names, list)
+
+    assert len(geodataframes) + len(layer_names) == 2
+    for gdf, name in zip(geodataframes, layer_names):
+        assert isinstance(gdf, gpd.GeoDataFrame)
+        assert isinstance(name, str)
+
+
+def test_single_save_file_geojson(tmp_path):
+    # tmp_path is a temporary Path directory
+    geodataframes, layer_names = transform.load_singlelayer(
+        test_singlelayer_file_path,
+        transform.determine_filetype(test_singlelayer_file_path),
+    )
+    filenames = [tmp_path / test_single_file_save_path_geojson]
+    try:
+        transform.save_files(
+            geodataframes,
+            layer_names,
+            transform_to_type=transform.GEOJSON,
+            filenames=filenames,
+        )
+    except fiona.errors.SchemaError:
+        print([gdf.columns for gdf in geodataframes])
+        raise
+
+
 def test_single_save_file(tmp_path):
     # tmp_path is a temporary Path directory
-    geodataframes, layer_names = transform.load_singlelayer(test_singlelayer_file_path)
+    geodataframes, layer_names = transform.load_singlelayer(
+        test_singlelayer_file_path,
+        transform.determine_filetype(test_singlelayer_file_path),
+    )
     filenames = [tmp_path / test_single_file_save_path]
     try:
         transform.save_files(
             geodataframes,
             layer_names,
-            savefile_driver=transform.GEOPACKAGE_DRIVER,
             filenames=filenames,
+            transform_to_type=transform.SHAPEFILE,
         )
     except fiona.errors.SchemaError:
         print([gdf.columns for gdf in geodataframes])
@@ -84,9 +126,7 @@ def test_multi_layer_save(tmp_path):
     filenames = []
     for layer_name in layer_names:
         filenames.append(tmp_path / f"{layer_name}_test_multi_layer.shp")
-    transform.save_files(
-        geodataframes, layer_names, filenames, savefile_driver=SHAPEFILE_DRIVER
-    )
+    transform.save_files(geodataframes, layer_names, filenames, transform.SHAPEFILE)
 
 
 def test_driver_strings():
@@ -106,11 +146,7 @@ def test_load_filegeodatabase(tmp_path):
     for layer_name in layer_names:
         filenames.append(tmp_path / f"{layer_name}_test_filegeodatabase.shp")
     # Save to multiple shapefiles
-    transform.save_files(
-        geodataframes, layer_names, filenames, savefile_driver=SHAPEFILE_DRIVER
-    )
+    transform.save_files(geodataframes, layer_names, filenames, transform.SHAPEFILE)
     # Save same files to a single geopackage
     filenames = [tmp_path / f"saving_filegeodatabase.gpkg"]
-    transform.save_files(
-        geodataframes, layer_names, filenames, savefile_driver=GEOPACKAGE_DRIVER
-    )
+    transform.save_files(geodataframes, layer_names, filenames, transform.GEOPACKAGE)
