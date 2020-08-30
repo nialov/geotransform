@@ -9,3 +9,4 @@ geotrans.egg-info
 docs/_build
 .esri.gz
 .coverage
+build
