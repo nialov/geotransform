@@ -26,7 +26,6 @@ driver_dict = {
     GEOJSON: GEOJSON_DRIVER,
 }
 MULTILAYER_CAPABLE = [GEOPACKAGE, FILEGEODATABASE]
-SINGLELAYER_CAPABLE = [SHAPEFILE, GEOJSON]
 SAVE_CAPABLE = [GEOPACKAGE, SHAPEFILE, GEOJSON]
 FILETYPES = [GEOPACKAGE, SHAPEFILE, FILEGEODATABASE, GEOJSON]
 SUPPORTS_LAYER_NAMES = [GEOPACKAGE, SHAPEFILE, FILEGEODATABASE]
@@ -45,7 +44,7 @@ def load_file(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
     if filetype in MULTILAYER_CAPABLE:
         # Can contain multiple layers.
         geodataframes, layer_names = load_multilayer(filepath)
-    elif filetype in SINGLELAYER_CAPABLE:
+    elif filetype in FILETYPES:
         # Only containts a single layer
         geodataframes, layer_names = load_singlelayer(filepath, filetype)
         assert len(geodataframes) + len(layer_names) == 2
@@ -99,10 +98,11 @@ def load_multilayer(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
         # Tries to read layer names using a running index. When this fails
         # -> break the for loop.
         try:
-            name = fiona.open(filepath, layer=i).name
-            geodataframe = gpd.read_file(filepath, layer=i)
-            geodataframes.append(geodataframe)
-            layer_names.append(name)
+            with fiona.open(filepath, layer=i) as opened:
+                name = opened.name
+                geodataframe = gpd.read_file(filepath, layer=i)
+                geodataframes.append(geodataframe)
+                layer_names.append(name)
         except:
             break
     return geodataframes, layer_names
