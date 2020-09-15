@@ -12,6 +12,7 @@ tox = "*"
 pipenv-setup = "*"
 sphinx-autodoc-typehints = "*"
 pipenv-to-requirements = "*"
+pylama = "*"
 
 [packages]
 geopandas = "*"

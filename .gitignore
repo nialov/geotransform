@@ -10,3 +10,6 @@ docs/_build
 .esri.gz
 .coverage
 build
+.vimspector.json
+hello.py
+test.sh

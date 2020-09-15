@@ -1,8 +1,6 @@
 """
 Description: Command line integration of geotransfrom.
 """
-from typing import Iterable
-
 import click
 from pathlib import Path
 
@@ -54,8 +52,7 @@ def main(inputs: tuple, transform_to_type: str, output: str):
     If the output is a directory all input layers are saved to that directory based
     on their layer name and the given --to_type parameter.
     """
-
-    validate_inputs(inputs, transform_to_type, output="")
+    validate_inputs(inputs, transform_to_type, output)
     run_transform(inputs, transform_to_type, output)
 
 
@@ -159,7 +156,7 @@ def validate_inputs(inputs, transform_to_type: str, output: str) -> None:
         except RuntimeError:
             print("No click runtime detected -> Script has been called from python.")
     if transform_to_type in [SHAPEFILE] and Path(output).is_file():
-        if not len(inputs) == 1:
+        if len(inputs) != 1:
             raise ValueError(f"Shapefiles do not handle multiple layers.")
 
 
