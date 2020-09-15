@@ -147,6 +147,11 @@ def run_transform(inputs, transform_to_type, output):
 
 
 def validate_inputs(inputs, transform_to_type: str, output: str) -> None:
+    if any([argument is None for argument in (inputs, transform_to_type, output)]):
+        raise TypeError(
+            f"None value was passed as an argument.\n"
+            f"Values: {inputs, transform_to_type, output}"
+        )
     if not isinstance(inputs, tuple) or len(inputs) == 0:
         try:
             current_context = click.get_current_context()
