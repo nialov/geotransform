@@ -77,11 +77,13 @@ def run_transform(inputs, transform_to_type, output):
             click.echo(f"Saving to output folder: {output}")
             # Save individual geopackages, geojsons or shapefiles to a given directory.
             save_paths = []
+            assert len(layer_names) != 0
             for layer_name in layer_names:
                 save_paths.append(
                     Path(output) / Path(f"{layer_name}.{transform_to_type}")
                 )
 
+            assert len(save_paths) != 0
             transform.save_files(
                 geodataframes, layer_names, save_paths, transform_to_type
             )

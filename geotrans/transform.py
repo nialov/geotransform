@@ -149,9 +149,12 @@ def save_files(
     an error is thrown.
 
     Filenames is a list of Paths that have been checked to be valid.
-    If user inputted no filenames: the filename will be made from layer name 
+    If user inputted no filenames: the filename will be made from layer name
     before this function.
     """
+    assert len(geodataframes) != 0
+    assert len(layer_names) != 0
+    assert len(filenames) != 0
     savefile_driver = driver_dict[transform_to_type]
     if savefile_driver == GEOPACKAGE_DRIVER:
         geodataframes = validate_loaded_geodataframes(geodataframes, layer_names)

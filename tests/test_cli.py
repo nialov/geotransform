@@ -3,7 +3,6 @@ Description: pytests for cli.py
 """
 
 from pathlib import Path
-import pytest
 import geopandas as gpd
 from click.testing import CliRunner
 from geotrans import cli
@@ -92,15 +91,60 @@ def test_command_line_integration(tmp_path):
     Tests click functionality.
     """
     clirunner = CliRunner()
+    output_file = "cli_test"
     cli_args = [
         "tests/data/KL5_tulkinta.shp",
         "--to_type",
         "gpkg",
         "--output",
-        f"{tmp_path}/cli_test",
+        f"{tmp_path}/{output_file}",
     ]
     result = clirunner.invoke(cli.main, cli_args)
     # Check that exit code is 0 (i.e. ran succesfully.)
     assert result.exit_code == 0
     # Checks if output path is printed
     assert str(tmp_path) in result.output
+    assert (Path(tmp_path) / Path(f"{output_file}.gpkg")).exists()
+
+
+def test_command_line_integration_gpkg_to_shp(tmp_path):
+    """
+    Tests click functionality.
+    """
+    clirunner = CliRunner()
+    output_file = "cli_test"
+    cli_args = [
+        "tests/data/OG1_tulkinta_filtered_5m.gpkg",
+        "--to_type",
+        "shp",
+        "--output",
+        f"{tmp_path}/{output_file}",
+    ]
+    result = clirunner.invoke(cli.main, cli_args)
+    # Check that exit code is 0 (i.e. ran succesfully.)
+    assert result.exit_code == 0
+    # Checks if output path is printed
+    assert str(tmp_path) in result.output
+    assert (Path(tmp_path) / Path(f"{output_file}.shp")).exists()
+
+
+def test_command_line_integration_gpkg_to_dir(tmp_path):
+    """
+    Tests click functionality.
+    """
+    assert len(list(Path(tmp_path).glob("*"))) == 0
+    clirunner = CliRunner()
+    cli_args = [
+        "tests/data/OG1_tulkinta_filtered_5m.gpkg",
+        "--to_type",
+        "shp",
+        "--output",
+        f"{tmp_path}",
+    ]
+    result = clirunner.invoke(cli.main, cli_args)
+    # Check that exit code is 0 (i.e. ran succesfully.)
+    assert result.exit_code == 0
+    # Checks if output path is printed
+    assert str(tmp_path) in result.output
+    # tmp_path_head = Path(tmp_path).name
+    assert len(list(Path(tmp_path).glob("*"))) != 0
