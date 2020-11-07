@@ -15,6 +15,7 @@ pylama = "*"
 setuptools = "*"
 wheel = "*"
 twine = "*"
+bump2version = "*"
 
 [packages]
 geopandas = "*"
