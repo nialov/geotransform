@@ -83,8 +83,8 @@
               <!-- Local TOC -->
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">Module installation</a><ul>
-<li><a class="reference internal" href="#from-source-into-pipenv">From source into pipenv</a></li>
 <li><a class="reference internal" href="#install-into-your-python-environment-of-choice-with-pip">Install into your Python environment of choice with pip</a></li>
+<li><a class="reference internal" href="#from-source-into-pipenv">From source into pipenv</a></li>
 </ul>
 </li>
 </ul>
@@ -154,36 +154,43 @@
             
   <div class="section" id="module-installation">
 <h1>Module installation<a class="headerlink" href="#module-installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="install-into-your-python-environment-of-choice-with-pip">
+<h2>Install into your Python environment of choice with pip<a class="headerlink" href="#install-into-your-python-environment-of-choice-with-pip" title="Permalink to this headline">¶</a></h2>
+<p>Both methods use the included setup.py to install the package.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Manually using git</span>
+git clone https://github.com/nialov/geotransform.git --depth <span class="m">1</span>
+<span class="nb">cd</span> geotransform
+pip3 install .
+
+<span class="c1"># Using pip+git</span>
+pip install git+https://github.com/nialov/geotransform#egg<span class="o">=</span>geotrans
+</pre></div>
+</div>
+</div>
 <div class="section" id="from-source-into-pipenv">
 <h2>From source into pipenv<a class="headerlink" href="#from-source-into-pipenv" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Requires Python &gt;3.7 installed with
 <a class="reference external" href="https://pipenv.pypa.io/en/latest/">pipenv</a></p></li>
 </ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/nialov/geotransform.git
+<p>Pipenv allows exact replication of python environment using the Pipfile.lock
+file. <code class="docutils literal notranslate"><span class="pre">pipenv</span> <span class="pre">sync</span></code> installs from the Pipfile.lock.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/nialov/geotransform.git --depth <span class="m">1</span>
 <span class="nb">cd</span> geotransform
-pipenv install
+pipenv sync
 pipenv shell
 </pre></div>
 </div>
-<p>If if you want to run tests or make documentation add –dev after pipenv
-install. tox runs the test suite, makes documentation and syncs Pipfile
+<p>If you want to run tests or make documentation add –dev after pipenv
+sync. tox runs the test suite, makes documentation and syncs Pipfile
 -&gt; setup.py files.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pipenv install --dev
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pipenv sync --dev
 pipenv shell
 tox
 </pre></div>
 </div>
 <p>Script now accessible as geotrans inside the pipenv</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geotrans --help
-</pre></div>
-</div>
-</div>
-<div class="section" id="install-into-your-python-environment-of-choice-with-pip">
-<h2>Install into your Python environment of choice with pip<a class="headerlink" href="#install-into-your-python-environment-of-choice-with-pip" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/nialov/geotransform.git
-<span class="nb">cd</span> geotransform
-pip3 install .
 </pre></div>
 </div>
 </div>

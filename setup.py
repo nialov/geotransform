@@ -58,7 +58,6 @@ setup(
             "snowballstemmer==2.0.0",
             "sortedcontainers==2.2.2",
             "sphinx==3.3.0",
-            "sphinx-autodoc-typehints==1.11.1",
             "sphinxcontrib-applehelp==1.0.2; python_version >= '3.5'",
             "sphinxcontrib-devhelp==1.0.2; python_version >= '3.5'",
             "sphinxcontrib-htmlhelp==1.0.3; python_version >= '3.5'",

@@ -17,5 +17,4 @@ pylama
 pytest
 recommonmark
 sphinx
-sphinx-autodoc-typehints
 tox
