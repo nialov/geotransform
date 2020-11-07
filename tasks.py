@@ -4,6 +4,34 @@ patch = "patch"
 minor = "minor"
 major = "major"
 
+make_dist_cmd = "pipenv run python3 setup.py sdist bdist_wheel"
+
+
+@task
+def make_pytest(c):
+    c.run("pipenv run pytest")
+
+
+@task
+def make_tox(c):
+    c.run("pipenv run tox -e py37, py38")
+
+
+@task
+def make_pipenv_requirements(c):
+    c.run("pipenv run pipenv_to_requirements")
+    c.run("pipenv run pipenv-setup sync --dev")
+
+
+@task
+def make_tox_docs(c):
+    c.run("pipenv run tox -e docs")
+
+
+@task
+def make_dist(c):
+    c.run(make_dist_cmd)
+
 
 def git_commit_all(c, commit_msg: str) -> int:
     c.run("git add .")
@@ -11,22 +39,13 @@ def git_commit_all(c, commit_msg: str) -> int:
     return result.exited
 
 
-@task(help={"patch_minor_major": "Patch, minor or major version bump."})
+@task(
+    help={"patch_minor_major": "Patch, minor or major version bump."},
+    pre=[make_pytest, make_tox, make_pipenv_requirements, make_tox_docs],
+    post=[make_pytest],
+)
 def make_version_bump(c, patch_minor_major=patch):
-    if patch_minor_major not in (patch, minor, major):
-        print("Incorrect patch_minor_major argument.")
-        print(f"Correct choices: {(patch, minor, major)}")
-        return
-    result = c.run("pipenv run tox")
-    if result.exited == 0:
-        # tox succesfully exited
-        git_commit_all(c, commit_msg="tox build before bumping version")
-        bump_result = c.run(f"bump2version --verbose {patch_minor_major} --dry-run")
-        if bump_result.exited == 0:
-            c.run("pipenv run tox")
-            git_commit_all(c, commit_msg="tox build after bumping version.")
-            print("All committed and ready for git push.")
-        else:
-            return
-    else:
-        return
+    git_commit_all(c, commit_msg="Git commit before version bump.")
+    c.run(f"bump2version --verbose {patch_minor_major} --dry-run")
+    c.run(make_dist_cmd)
+    git_commit_all(c, commit_msg="Git commit after version bump and make_dist.")
