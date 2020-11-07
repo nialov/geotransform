@@ -10,6 +10,8 @@
 * Command line utility for quick transformations between geodata/spatial
   filetypes.
 * Python functions with documentation for direct usage.
+  * This is my own main use case: A package with all basic geopandas file loads
+    bundles.
 * Uses Python pathlib for cross-platform path handling.
 
 ## Support
@@ -28,6 +30,14 @@ Currently supports:
 * [geopandas](https://github.com/geopandas/geopandas) for transforming between
   geodata filetypes.
 * [click](https://github.com/pallets/click/) for command line integration.
+
+## Alternatics
+
+The GDAL tool [ogr2ogr](https://gdal.org/programs/ogr2ogr.html) is a much more
+sophisticated command-line tool for converting between spatial file formats.
+
+Geopandas by itself supports many more spatial file formats. For more advanced
+use cases in python I recommend just using geopandas.
 
 ## License
 

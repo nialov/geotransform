@@ -2,7 +2,7 @@
 
 ## Command line
 
-Run 
+Run
 
 ~~~bash
 geotrans --help

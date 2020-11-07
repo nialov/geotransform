@@ -4,30 +4,12 @@ geotrans package
 Submodules
 ----------
 
-geotrans.cli module
--------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: geotrans.cli
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-geotrans.modify module
-----------------------
-
-.. automodule:: geotrans.modify
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-geotrans.transform module
--------------------------
-
-.. automodule:: geotrans.transform
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
+   geotrans.cli
+   geotrans.modify
+   geotrans.transform
 
 Module contents
 ---------------
