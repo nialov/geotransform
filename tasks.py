@@ -36,8 +36,7 @@ def make_dist(c):
 
 
 def git_commit_all(c, commit_msg: str) -> int:
-    c.run("git add .")
-    result = c.run(f"git commit -m '{commit_msg}'")
+    result = c.run(f"git commit -a -m '{commit_msg}'")
     return result.exited
 
 
@@ -46,6 +45,7 @@ def git_commit_all(c, commit_msg: str) -> int:
     pre=[make_pytest, make_tox, make_pipenv_requirements],
 )
 def make_version_bump(c, patch_minor_major=patch):
+    git_commit_all(c, "Commit requirements and requirements-dev files.")
     verify = input(
         f"Are you sure you wish to do a {patch_minor_major} version bump? y/n: "
     )
