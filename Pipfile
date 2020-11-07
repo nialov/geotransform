@@ -12,6 +12,9 @@ tox = "*"
 pipenv-setup = "*"
 pipenv-to-requirements = "*"
 pylama = "*"
+setuptools = "*"
+wheel = "*"
+twine = "*"
 
 [packages]
 geopandas = "*"

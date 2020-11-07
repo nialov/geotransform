@@ -16,5 +16,8 @@ pipenv-to-requirements
 pylama
 pytest
 recommonmark
+setuptools
 sphinx
 tox
+twine
+wheel

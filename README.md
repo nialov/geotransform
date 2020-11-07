@@ -31,7 +31,7 @@ Currently supports:
   geodata filetypes.
 * [click](https://github.com/pallets/click/) for command line integration.
 
-## Alternatics
+## Alternatives
 
 The GDAL tool [ogr2ogr](https://gdal.org/programs/ogr2ogr.html) is a much more
 sophisticated command-line tool for converting between spatial file formats.
