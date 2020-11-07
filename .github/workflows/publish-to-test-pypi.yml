@@ -17,7 +17,7 @@ jobs:
         python -m pip install setuptools wheel
     - name: Build binary wheel and a source tarball
       run: >-
-        python setup.py install sdist bdist_wheel
+        python setup.py sdist bdist_wheel
     - name: Publish distribution 📦 to Test PyPI
       # if: startsWith(github.ref, 'refs/tags') uncomment for upload only on tags
       uses: pypa/gh-action-pypi-publish@master

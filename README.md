@@ -2,8 +2,8 @@
 
 ## Documentation
 
-* Published on GitHub pages:
-  [Documentation](https://nialov.github.io/geotransform/index.html)
+* Published on ReadTheDocs:
+  [Documentation](https://geotransform.readthedocs.io/en/latest/index.html)
 
 ## Features
 
@@ -11,7 +11,7 @@
   filetypes.
 * Python functions with documentation for direct usage.
   * This is my own main use case: A package with all basic geopandas file loads
-    bundles.
+    bundled.
 * Uses Python pathlib for cross-platform path handling.
 
 ## Support
