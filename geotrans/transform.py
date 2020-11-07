@@ -93,18 +93,13 @@ def load_multilayer(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
     """
     geodataframes = []
     layer_names = []
-    # TODO: Better implementation, replace try-except with proper method.
-    for i in range(1000):
-        # Tries to read layer names using a running index. When this fails
-        # -> break the for loop.
-        try:
-            with fiona.open(filepath, layer=i) as opened:
-                name = opened.name
-                geodataframe = gpd.read_file(filepath, layer=i)
-                geodataframes.append(geodataframe)
-                layer_names.append(name)
-        except:
-            break
+    for i in range(len(fiona.listlayers(filepath))):
+        # fiona.listlayers lists all layer names
+        with fiona.open(filepath, layer=i) as opened:
+            name = opened.name
+            geodataframe = gpd.read_file(filepath, layer=i)
+            geodataframes.append(geodataframe)
+            layer_names.append(name)
     return geodataframes, layer_names
 
 
@@ -195,4 +190,3 @@ def validate_loaded_geodataframes(geodataframes, layer_names):
                 )
             )
     return geodataframes
-
