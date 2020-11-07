@@ -17,6 +17,7 @@ wheel = "*"
 twine = "*"
 bump2version = "*"
 invoke = "*"
+sphinx-rtd-theme = "*"
 
 [packages]
 geopandas = "*"
