@@ -16,6 +16,7 @@ setuptools = "*"
 wheel = "*"
 twine = "*"
 bump2version = "*"
+invoke = "*"
 
 [packages]
 geopandas = "*"
