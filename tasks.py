@@ -45,7 +45,13 @@ def git_commit_all(c, commit_msg: str) -> int:
     post=[make_pytest],
 )
 def make_version_bump(c, patch_minor_major=patch):
+    verify = input(
+        f"Are you sure you wish to do a {patch_minor_major} version bump? y/n"
+    )
+    if verify not in ["y", "yes", "Y"]:
+        print(f"Aborting according to user input: {verify}")
+        return
     git_commit_all(c, commit_msg="Git commit before version bump.")
-    c.run(f"bump2version --verbose {patch_minor_major} --dry-run")
+    c.run(f"bump2version --verbose {patch_minor_major}")
     c.run(make_dist_cmd)
     git_commit_all(c, commit_msg="Git commit after version bump and make_dist.")
