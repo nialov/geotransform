@@ -90,6 +90,8 @@ def load_multilayer(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
     """
     Use fiona to parse geopackage and filegeodatabase layers.
     Returns a list of GeoDataFrames and a list layer names.
+
+    Will also work on single layer files.
     """
     geodataframes = []
     layer_names = []

@@ -1,6 +1,6 @@
 name: Test geotransform with tox and publish on tags
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   # Test with tox

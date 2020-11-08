@@ -10,42 +10,39 @@ from geotrans.transform import (
 from pathlib import Path
 import geopandas as gpd
 import fiona
-
-test_multilayer_file_path = Path("tests/data/Two_Layer_Geopackage_OG6_OG7.gpkg")
-test_singlelayer_file_path = Path("tests/data/branches_cropped_Domain_IIId.shp")
-test_dir_path = Path("tests/data")
-test_invalid_path = Path("tests/datarrr")
-
-test_filegeodatabase_file_path = Path("tests/data/OG1_faults.gdb")
-test_geojson_file_save_path = Path("tests/data/Hastholmen_LiDAR_lineaments.geojson")
-
-test_single_file_save_path = Path("i_hope_this_is_saved.gpkg")
-test_single_file_save_path_geojson = Path("i_hope_this_is_saved.geojson")
+from tests import Helpers
+import pytest
 
 
 def test_check_file():
-    assert transform.check_file(test_multilayer_file_path) is None
+    assert transform.check_file(Helpers.test_multilayer_file_path) is None
     try:
-        transform.check_file(test_dir_path)
+        transform.check_file(Helpers.test_dir_path)
     except IsADirectoryError:
         pass
     try:
-        transform.check_file(test_invalid_path)
+        transform.check_file(Helpers.test_invalid_path)
     except FileNotFoundError:
         pass
 
 
-def test_determine_filetype():
-    assert (
-        transform.determine_filetype(test_multilayer_file_path) == transform.GEOPACKAGE
+@pytest.mark.parametrize(
+    "file_path,assumed_filetype", Helpers.test_determine_filetype_params
+)
+def test_determine_filetype(file_path: Path, assumed_filetype: str):
+    assert transform.determine_filetype(file_path) == assumed_filetype
+
+
+@pytest.mark.parametrize("file_path", Helpers.test_load_multilayer_params)
+def test_load_multilayer(file_path: Path):
+    geodataframes, layer_names = transform.load_multilayer(
+        Helpers.test_multilayer_file_path
     )
-
-
-def test_load_multilayer():
-    geodataframes, layer_names = transform.load_multilayer(test_multilayer_file_path)
 
     assert isinstance(geodataframes, list)
     assert isinstance(layer_names, list)
+    assert len(geodataframes) != 0
+    assert len(geodataframes) == len(layer_names)
 
     for gdf, name in zip(geodataframes, layer_names):
         assert isinstance(gdf, gpd.GeoDataFrame)
@@ -54,8 +51,8 @@ def test_load_multilayer():
 
 def test_load_singlelayer():
     geodataframes, layer_names = transform.load_singlelayer(
-        test_singlelayer_file_path,
-        transform.determine_filetype(test_singlelayer_file_path),
+        Helpers.test_singlelayer_file_path,
+        transform.determine_filetype(Helpers.test_singlelayer_file_path),
     )
 
     assert isinstance(geodataframes, list)
@@ -69,8 +66,8 @@ def test_load_singlelayer():
 
 def test_load_geojson():
     geodataframes, layer_names = transform.load_singlelayer(
-        test_geojson_file_save_path,
-        transform.determine_filetype(test_geojson_file_save_path),
+        Helpers.test_geojson_file_save_path,
+        transform.determine_filetype(Helpers.test_geojson_file_save_path),
     )
 
     assert isinstance(geodataframes, list)
@@ -85,10 +82,10 @@ def test_load_geojson():
 def test_single_save_file_geojson(tmp_path):
     # tmp_path is a temporary Path directory
     geodataframes, layer_names = transform.load_singlelayer(
-        test_singlelayer_file_path,
-        transform.determine_filetype(test_singlelayer_file_path),
+        Helpers.test_singlelayer_file_path,
+        transform.determine_filetype(Helpers.test_singlelayer_file_path),
     )
-    filenames = [tmp_path / test_single_file_save_path_geojson]
+    filenames = [tmp_path / Helpers.test_single_file_save_path_geojson]
     try:
         transform.save_files(
             geodataframes,
@@ -104,10 +101,10 @@ def test_single_save_file_geojson(tmp_path):
 def test_single_save_file(tmp_path):
     # tmp_path is a temporary Path directory
     geodataframes, layer_names = transform.load_singlelayer(
-        test_singlelayer_file_path,
-        transform.determine_filetype(test_singlelayer_file_path),
+        Helpers.test_singlelayer_file_path,
+        transform.determine_filetype(Helpers.test_singlelayer_file_path),
     )
-    filenames = [tmp_path / test_single_file_save_path]
+    filenames = [tmp_path / Helpers.test_single_file_save_path]
     try:
         transform.save_files(
             geodataframes,
@@ -121,7 +118,9 @@ def test_single_save_file(tmp_path):
 
 
 def test_multi_layer_save(tmp_path):
-    geodataframes, layer_names = transform.load_multilayer(test_multilayer_file_path)
+    geodataframes, layer_names = transform.load_multilayer(
+        Helpers.test_multilayer_file_path
+    )
     assert len(geodataframes) == len(layer_names) == 2
     filenames = []
     for layer_name in layer_names:
@@ -136,10 +135,10 @@ def test_driver_strings():
 
 def test_load_filegeodatabase(tmp_path):
     """
-    Tests loading a filegeodatabase.
+    Helpers.tests loading a filegeodatabase.
     """
     geodataframes, layer_names = transform.load_multilayer(
-        test_filegeodatabase_file_path
+        Helpers.test_filegeodatabase_file_path
     )
     assert len(geodataframes) == len(layer_names)
     filenames = []
