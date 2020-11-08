@@ -93,7 +93,7 @@ setup(
         ]
     },
     name="geotrans",
-    version="0.0.3",
+    version="0.0.4",
     author="Nikolas Ovaskainen",
     author_email="nikolasovaskainen@gmail.com",
     description="Fast geodata filetype transformations using geopandas.",
