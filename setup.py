@@ -25,7 +25,7 @@ setup(
             "distlib==0.3.1",
             "docutils==0.16; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
             "filelock==3.0.12",
-            "hypothesis==5.41.1",
+            "hypothesis==5.41.2",
             "idna==2.10; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "imagesize==1.2.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "iniconfig==1.1.1",
