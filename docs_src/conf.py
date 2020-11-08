@@ -30,7 +30,12 @@ release = "0.0.3"
 
 import recommonmark
 
-extensions = ["recommonmark", "sphinx.ext.autodoc", "sphinx_rtd_theme"]
+extensions = [
+    "recommonmark",
+    "sphinx.ext.autodoc",
+    "sphinx_rtd_theme",
+    "sphinxcontrib.spelling",
+]
 
 # Add .md markdown files as sources.
 source_suffix = {

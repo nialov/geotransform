@@ -30,6 +30,11 @@ def make_pipenv_requirements(c):
 #     c.run("pipenv run tox -e docs")
 
 
+# @task
+# def spell_check_docs(c):
+#     c.run("pipenv run sphinx-build -b spelling docs_src docs")
+
+
 @task
 def make_dist(c):
     c.run(make_dist_cmd)

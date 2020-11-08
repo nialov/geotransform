@@ -1,8 +1,31 @@
 # Module installation
 
-## Install into your Python environment of choice with pip
+* Installation works well on linux.
+* Installation of e.g. GDAL will fail with windows pip install.
+  * On windows installing e.g. GDAL from
+    [Gohlke's](https://www.lfd.uci.edu/~gohlke/pythonlibs/) pre-built binaries
+    is often recommended as the easiest method.
 
-Both methods use the included setup.py to install the package.
+## From PyPI source
+
+* pip installation:
+
+~~~bash
+# Add --user for user specific installation
+pip install geotrans --user
+~~~
+
+* pipenv installation:
+  * Requires Python >3.7 installed with
+    [pipenv](https://pipenv.pypa.io/en/latest/)
+
+~~~bash
+pipenv install geotrans
+~~~
+
+## From GitHub source
+
+* pip installation:
 
 ~~~bash
 # Manually using git
@@ -14,10 +37,7 @@ pip3 install .
 pip install git+https://github.com/nialov/geotransform#egg=geotrans
 ~~~
 
-## From source into pipenv
-
-* Requires Python >3.7 installed with
-  [pipenv](https://pipenv.pypa.io/en/latest/)
+* pipenv installation:
 
 Pipenv allows exact replication of python environment using the Pipfile.lock
 file. `pipenv sync` installs from the Pipfile.lock.
@@ -29,18 +49,30 @@ pipenv sync
 pipenv shell
 ~~~
 
-If you want to run tests or make documentation add --dev after pipenv
-sync. tox runs the test suite, makes documentation and syncs Pipfile
--> setup.py files.
+* pipenv installation for development:
+  * This is the preferred installation for development purposes.
 
 ~~~bash
+git clone https://github.com/nialov/geotransform.git
+cd geotransform
 pipenv sync --dev
-pipenv shell
-tox
+# Run tests with tox
+pipenv run tox -e py37, py38
+# Make documentation locally
+pipenv run tox -e docs
 ~~~
 
-Script now accessible as geotrans inside the pipenv
+# Test installation
+
+* Script accessible as geotrans
 
 ~~~bash
+# With pip installation
+geotrans --help
+# With pipenv
+pipenv run geotrans --help
+# or
+pipenv shell
+# now in geotrans shell (geotrans)
 geotrans --help
 ~~~
