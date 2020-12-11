@@ -7,7 +7,7 @@
 
 ## Features
 
-* Command line utility for quick transformations between geodata/spatial
+* Command line utility for easy transformations between geodata/spatial
   filetypes.
 * Python functions with documentation for direct usage.
   * This is my own main use case: A package with all basic geopandas file loads
@@ -31,7 +31,7 @@ All file formats supported by geopandas can be implemented.
 ## Dependencies
 
 * [geopandas](https://github.com/geopandas/geopandas) for transforming between
-  geodata filetypes which in turn uses GDAL, fiona.
+  geodata filetypes which in turn uses fiona (that uses GDAL).
 * [click](https://github.com/pallets/click/) for command line integration.
 
 ## Alternatives
@@ -40,7 +40,10 @@ The GDAL tool [ogr2ogr](https://gdal.org/programs/ogr2ogr.html) is a much more
 sophisticated command-line tool for converting between spatial file formats.
 
 Geopandas by itself supports many more spatial file formats. For more advanced
-use cases in Python I recommend just using geopandas.
+use cases when interacting with Python I recommend just using geopandas.
+
+Fiona provides a command-line interface *fio*.
+[fio](https://fiona.readthedocs.io/en/latest/manual.html).
 
 ## License
 
