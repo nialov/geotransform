@@ -29,3 +29,15 @@ class Helpers:
         (test_filegeodatabase_file_path),
         (test_singlelayer_file_path),
     ]
+    test_inputs = ("tests/data/OG1_tulkinta_filtered_5m.gpkg",)
+    test_inputs2 = (
+        "tests/data/OG1_tulkinta_filtered_5m.gpkg",
+        "tests/data/OG4_fractures_ML_filtered_5m.gpkg",
+    )
+    test_input_geojson = ("tests/data/Hastholmen_LiDAR_lineaments.geojson",)
+    test_output = "test.gpkg"
+
+    test_run_transform_params = [
+        (test_inputs, transform.GEOPACKAGE, test_output),
+        (test_inputs2, transform.GEOPACKAGE, test_output),
+    ]
