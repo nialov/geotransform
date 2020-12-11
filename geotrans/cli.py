@@ -1,8 +1,10 @@
 """
 Description: Command line integration of geotransfrom.
 """
-import click
 from pathlib import Path
+from typing import Tuple
+
+import click
 
 import geotrans.transform as transform
 from geotrans.transform import (
@@ -34,7 +36,7 @@ from geotrans.transform import (
     "Filename suffix is appended based on --to_type if missing from output.",
 )
 @click.version_option()
-def main(inputs: tuple, transform_to_type: str, output: str):
+def main(inputs: Tuple[str, ...], transform_to_type: str, output: str):
     """
     A tool for transforming between spatial geodata filetypes
     (e.g. ESRI Shapefile, Geopackage).
@@ -56,7 +58,7 @@ def main(inputs: tuple, transform_to_type: str, output: str):
     run_transform(inputs, transform_to_type, output)
 
 
-def run_transform(inputs, transform_to_type, output):
+def run_transform(inputs: Tuple[str], transform_to_type: str, output: str):
     """
     Runs functions in transform.py
     """
@@ -148,7 +150,9 @@ def run_transform(inputs, transform_to_type, output):
         raise NotImplementedError(error_msg)
 
 
-def validate_inputs(inputs, transform_to_type: str, output: str) -> None:
+def validate_inputs(
+    inputs: Tuple[str, ...], transform_to_type: str, output: str
+) -> None:
     if any([argument is None for argument in (inputs, transform_to_type, output)]):
         raise TypeError(
             f"None value was passed as an argument.\n"
@@ -174,4 +178,3 @@ def finished(output):
     # TODO: click echo
     # print(f"Output(s) were written to {output}.")
     click.echo(click.style(f"Layer data was written to {output}.", fg="green"))
-
