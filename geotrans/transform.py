@@ -163,14 +163,16 @@ def save_files(
         assert savefile_driver in [GEOPACKAGE_DRIVER]
         assert len(set(layer_names)) == len(layer_names)
         for geodataframe, layer_name in zip(geodataframes, layer_names):
-            geodataframe.to_file(filenames[0], layer=layer_name, driver=savefile_driver)
+            geodataframe.to_file(
+                filenames[0], layer=layer_name, driver=savefile_driver)
     else:
         # Save layers to files.
         for geodataframe, layer_name, filename in zip(
             geodataframes, layer_names, filenames
         ):
             if transform_to_type in SUPPORTS_LAYER_NAMES:
-                geodataframe.to_file(filename, layer=layer_name, driver=savefile_driver)
+                geodataframe.to_file(filename, layer=layer_name,
+                                     driver=savefile_driver)
             else:
                 geodataframe.to_file(filename, driver=savefile_driver)
 
