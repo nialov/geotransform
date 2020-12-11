@@ -9,13 +9,13 @@ make_dist_cmd = "pipenv run python3 setup.py sdist bdist_wheel"
 
 
 @task
-def make_pytest(c):
+def pytest(c):
     c.run("pipenv run pytest")
 
 
 @task
-def make_tox(c):
-    c.run("pipenv run tox -e py37, py38")
+def tox(c):
+    c.run("pipenv run tox -e py37,py38")
 
 
 @task
@@ -47,7 +47,7 @@ def git_commit_all(c, commit_msg: str) -> int:
 
 @task(
     help={"patch_minor_major": "Patch, minor or major version bump."},
-    pre=[make_pytest, make_tox, make_pipenv_requirements],
+    pre=[pytest, tox, make_pipenv_requirements],
 )
 def make_version_bump(c, patch_minor_major=patch):
     git_commit_all(c, "Commit requirements and requirements-dev files.")
