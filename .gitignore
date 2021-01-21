@@ -13,3 +13,4 @@ build
 .vimspector.json
 hello.py
 test.sh
+docs
