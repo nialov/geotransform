@@ -1,5 +1,7 @@
-from invoke import task
 import re
+
+from invoke import task
+
 
 patch = "patch"
 minor = "minor"
@@ -20,9 +22,14 @@ def tox(c):
 
 @task
 def make_pipenv_requirements(c):
+    """
+    Sync Pipfile to setup.py and requirements*.txt files.
+    """
     # Add -f for applications requirements
-    c.run("pipenv run pipenv_to_requirements -f")
-    c.run("pipenv run pipenv-setup sync --dev")
+    c.run(
+        "pipenv run pipenv_to_requirements -o requirements.txt -d requirements-dev.txt"
+    )
+    c.run("pipenv run pipenv-setup sync --pipfile --dev")
 
 
 # @task
@@ -73,3 +80,4 @@ def make_version_bump(c, patch_minor_major=patch):
 #         pattern = re.compile("\d")
 #         match = re.match(pattern, curr_version_line)
 #         print(match)
+
