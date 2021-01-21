@@ -18,6 +18,9 @@ twine = "*"
 bump2version = "*"
 invoke = "*"
 sphinx-rtd-theme = "*"
+nox = "*"
+coverage = "*"
+sphinxcontrib-spelling = "*"
 
 [packages]
 geopandas = "*"
