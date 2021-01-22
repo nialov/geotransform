@@ -2,8 +2,11 @@
 Nox test suite.
 """
 
+import os
 from pathlib import Path
 from shutil import copy2, copytree, rmtree
+
+from setuptools import find_packages
 
 import nox
 
@@ -13,20 +16,14 @@ docs_dir_path = Path("docs")
 
 
 @nox.session(python="3.8")
-def teest(session):
+def pipenv_sync_test(session: nox.Session):
     """
-    Run strict test suite.
-    """
-    session.run("pwd")
+    Run strict pipenv test suite.
 
-
-@nox.session(python="3.8")
-def tests_strict(session: nox.Session):
-    """
-    Run strict test suite.
+    Creates tmp directory where Pipenv will sync dependencies from Pipfile.lock
     """
     tmp_dir = session.create_tmp()
-    for to_copy in ("geotrans", "tests", "Pipfile.lock"):
+    for to_copy in (*find_packages("."), "Pipfile.lock"):
         if Path(to_copy).is_dir():
             copytree(to_copy, Path(tmp_dir) / to_copy)
         elif Path(to_copy).is_file():
@@ -37,7 +34,7 @@ def tests_strict(session: nox.Session):
             FileNotFoundError("Expected file to be found.")
     session.chdir(tmp_dir)
     session.install("pipenv")
-    session.run(*"pipenv sync --dev --bare".split(" "))
+    session.run("pipenv", "sync", "--python", f"{session.python}", "--dev", "--bare")
     session.run(
         "pipenv",
         "run",
@@ -58,14 +55,7 @@ def tests_lazy(session):
     """
     session.install(".[dev]")
     session.run("pytest")
-
-
-@nox.session
-def test_geotrans(session):
-    """
-    Run test on geotrans script in new virtualenv.
-    """
-    session.install(".")
+    # test that geotrans cli tool is installed (and responding)
     session.run("geotrans", "--help")
 
 
@@ -85,7 +75,7 @@ def docs(session):
     """
     Make documentation.
 
-    Installation mimics readthedocs install.
+    Installation mimics readthedocs install (if succeeds, RTD should succeed.).
     """
     session.install(".[dev]")
     if docs_apidoc_dir_path.exists():

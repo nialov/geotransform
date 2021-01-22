@@ -31,17 +31,6 @@ def make_pipenv_requirements(c):
     )
     c.run("pipenv run pipenv-setup sync --pipfile --dev")
 
-
-# @task
-# def make_tox_docs(c):
-#     c.run("pipenv run tox -e docs")
-
-
-# @task
-# def spell_check_docs(c):
-#     c.run("pipenv run sphinx-build -b spelling docs_src docs")
-
-
 @task
 def make_dist(c):
     c.run(make_dist_cmd)
@@ -66,18 +55,3 @@ def make_version_bump(c, patch_minor_major=patch):
         return
     else:
         c.run(f"bump2version --verbose {patch_minor_major}")
-
-
-# @task
-# def make_tagged_commit(c):
-#     with open(".bumpversion.cfg") as cfg:
-#         curr_version_line = [
-#             line for line in cfg.readlines() if "current_version = " in line
-#         ]
-#         assert len(curr_version_line) == 1
-#         curr_version_line: str = curr_version_line[0]
-#         print(curr_version_line.strip())
-#         pattern = re.compile("\d")
-#         match = re.match(pattern, curr_version_line)
-#         print(match)
-
