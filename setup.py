@@ -31,7 +31,7 @@ setup(
             "iniconfig==1.1.1",
             "invoke==1.4.1",
             "jeepney==0.4.3; sys_platform == 'linux'",
-            "jinja2==2.11.2; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
+            "jinja2==2.11.3; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
             "keyring==21.5.0; python_version >= '3.6'",
             "markupsafe==1.1.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "mccabe==0.6.1",
