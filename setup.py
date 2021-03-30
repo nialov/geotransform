@@ -53,7 +53,7 @@ setup(
             "pycparser==2.20; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "pydocstyle==5.1.1; python_version >= '3.5'",
             "pyflakes==2.2.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
-            "pygments==2.7.2; python_version >= '3.5'",
+            "pygments==2.7.4; python_version >= '3.5'",
             "pylama==7.7.1",
             "pyparsing==2.4.7; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "pytest==6.1.2",
