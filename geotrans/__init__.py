@@ -1,5 +1,7 @@
-"""Top-level package for geotransfrom."""
+"""
+geotrans.
 
-__author__ = """Nikolas Ovaskainen"""
-__email__ = "nikolasovaskainen@gmail.com"
-__version__ = "0.0.4"
+Switch between spatial fileformats.
+"""
+
+__version__ = "0.0.4.post5.dev0+602fe7a"

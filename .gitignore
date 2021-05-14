@@ -1,15 +1,15 @@
-__pycache__
-*/__pycache__
-**/__pycache__
-.mypy_cache
-dev.py
-dev
-geotrans.egg-info
-.tox
-docs/_build
-.esri.gz
+docs
 .coverage
-build
-.vimspector.json
-hello.py
-test.sh
+.mypy_cache
+.ipynb_checkpoints/
+dev/
+*.egg-info
+.nox
+**/__pycache__
+.hypothesis
+.vim
+.esri.gz
+
+# We do not want to include requirements.txt
+# It is merely for backwards compatible pip installs
+requirements.txt

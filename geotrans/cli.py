@@ -8,17 +8,19 @@ import click
 
 import geotrans.transform as transform
 from geotrans.transform import (
-    SHAPEFILE,
-    GEOPACKAGE,
     FILEGEODATABASE,
     GEOJSON,
+    GEOPACKAGE,
+    SHAPEFILE,
     driver_dict,
 )
 
 
 @click.command()
 @click.argument(
-    "inputs", type=click.Path(exists=True, readable=True, resolve_path=True), nargs=-1,
+    "inputs",
+    type=click.Path(exists=True, readable=True, resolve_path=True),
+    nargs=-1,
 )
 @click.option(
     "transform_to_type",
@@ -31,7 +33,11 @@ from geotrans.transform import (
 @click.option(
     "output",
     "--output",
-    type=click.Path(writable=True, file_okay=True, dir_okay=True,),
+    type=click.Path(
+        writable=True,
+        file_okay=True,
+        dir_okay=True,
+    ),
     help="The output file or directory. "
     "Filename suffix is appended based on --to_type if missing from output.",
 )

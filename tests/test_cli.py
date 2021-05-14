@@ -3,12 +3,12 @@ Description: pytests for cli.py
 """
 
 from pathlib import Path
-import geopandas as gpd
-from click.testing import CliRunner, Result
-from geotrans import cli
-from geotrans import transform
-import pytest
 
+import geopandas as gpd
+import pytest
+from click.testing import CliRunner, Result
+
+from geotrans import cli, transform
 from tests import Helpers
 
 

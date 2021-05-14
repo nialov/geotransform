@@ -12,34 +12,34 @@
 #
 import os
 import sys
+from importlib import import_module
+
 
 sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath("."))
 
 # -- Project information -----------------------------------------------------
 
-project = "geotransform"
+project = "geotrans".replace("_", "-")
 copyright = "2020, Nikolas Ovaskainen"
 author = "Nikolas Ovaskainen"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.4"
+imported_package = import_module("geotrans")  # noqa
+
+release = imported_package.__version__  # type: ignore
 
 
 # -- General configuration ---------------------------------------------------
 
-import recommonmark
-
 extensions = [
-    "recommonmark",
     "sphinx.ext.autodoc",
     "sphinx_rtd_theme",
-    "sphinxcontrib.spelling",
+    "nbsphinx",
 ]
 
 # Add .md markdown files as sources.
 source_suffix = {
-    ".md": "markdown",
     ".rst": "restructuredtext",
 }
 master_doc = "index"
@@ -68,3 +68,17 @@ html_theme = "sphinx_rtd_theme"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+# -- Options for nbsphinx output ---------------------------------------------
+
+nbsphinx_execute_arguments = [
+    "--InlineBackend.figure_formats={'svg', 'pdf'}",
+    "--InlineBackend.rc={'figure.dpi': 96}",
+]
+
+if "READTHEDOCS" not in os.environ:
+    # Always execute notebooks locally (to test that they work!)
+    nbsphinx_execute = "always"
+else:
+    # Do not always execute notebooks on ReadtheDocs
+    nbsphinx_execute = "auto"

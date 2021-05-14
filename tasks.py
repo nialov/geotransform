@@ -1,75 +1,107 @@
-from invoke import task
-import re
+"""
+Invoke tasks.
 
-patch = "patch"
-minor = "minor"
-major = "major"
+Most tasks employ nox to create a virtual session for testing.
+"""
+from invoke import UnexpectedExit, task
 
-make_dist_cmd = "pipenv run python3 setup.py sdist bdist_wheel"
+NOX_PARALLEL_SESSIONS = ("tests_pip",)
 
-
-@task
-def pytest(c):
-    c.run("pipenv run pytest")
+PACKAGE_NAME = "geotrans"
 
 
 @task
-def tox(c):
-    c.run("pipenv run tox -e py37,py38")
+def requirements(c):
+    """
+    Sync requirements.
+    """
+    c.run("nox --session requirements")
+
+
+@task(pre=[requirements])
+def format_and_lint(c):
+    """
+    Format and lint everything.
+    """
+    c.run("nox --session format_and_lint")
+
+
+@task(pre=[requirements])
+def nox_parallel(c):
+    """
+    Run selected nox test suite sessions in parallel.
+    """
+    # Run asynchronously and collect promises
+    print(f"Running {len(NOX_PARALLEL_SESSIONS)} nox test sessions.")
+    promises = [
+        c.run(
+            f"nox --session {nox_test} --no-color",
+            asynchronous=True,
+            timeout=360,
+        )
+        for nox_test in NOX_PARALLEL_SESSIONS
+    ]
+
+    # Join all promises
+    results = [promise.join() for promise in promises]
+
+    # Check if Result has non-zero exit code (should've already thrown error.)
+    for result in results:
+        if result.exited != 0:
+            raise UnexpectedExit(result)
+
+    # Report to user of success.
+    print(f"{len(results)} nox sessions ran succesfully.")
 
 
 @task
-def make_pipenv_requirements(c):
-    # Add -f for applications requirements
-    c.run("pipenv run pipenv_to_requirements -f")
-    c.run("pipenv run pipenv-setup sync --dev")
+def update_version(c):
+    """
+    Update pyproject.toml version string.
+    """
+    c.run("nox --session update_version")
 
 
-# @task
-# def make_tox_docs(c):
-#     c.run("pipenv run tox -e docs")
+@task(pre=[requirements, update_version])
+def ci_test(c):
+    """
+    Test suite for continous integration testing.
+
+    Installs with pip, tests with pytest and checks coverage with coverage.
+    """
+    c.run("nox --session tests_pip")
 
 
-# @task
-# def spell_check_docs(c):
-#     c.run("pipenv run sphinx-build -b spelling docs_src docs")
+@task(pre=[requirements, nox_parallel])
+def test(_):
+    """
+    Run tests.
+
+    This is an extensive suite. It first tests in current environment and then
+    creates virtual sessions with nox to test installation -> tests.
+    """
 
 
-@task
-def make_dist(c):
-    c.run(make_dist_cmd)
+@task(pre=[requirements, update_version])
+def docs(c):
+    """
+    Make documentation to docs using nox.
+    """
+    c.run("nox --session docs")
 
 
-def git_commit_all(c, commit_msg: str) -> int:
-    result = c.run(f"git commit -a -m '{commit_msg}'")
-    return result.exited
+@task(pre=[requirements])
+def notebooks(c):
+    """
+    Execute and fill notebooks.
+    """
+    c.run("nox --session notebooks")
 
 
-@task(
-    help={"patch_minor_major": "Patch, minor or major version bump."},
-    pre=[pytest, tox, make_pipenv_requirements],
-)
-def make_version_bump(c, patch_minor_major=patch):
-    git_commit_all(c, "Commit requirements and requirements-dev files.")
-    verify = input(
-        f"Are you sure you wish to do a {patch_minor_major} version bump? y/n: "
-    )
-    if verify not in ["y", "yes", "Y", "Yes"]:
-        print(f"Aborting according to user input: {verify}")
-        return
-    else:
-        c.run(f"bump2version --verbose {patch_minor_major}")
-
-
-# @task
-# def make_tagged_commit(c):
-#     with open(".bumpversion.cfg") as cfg:
-#         curr_version_line = [
-#             line for line in cfg.readlines() if "current_version = " in line
-#         ]
-#         assert len(curr_version_line) == 1
-#         curr_version_line: str = curr_version_line[0]
-#         print(curr_version_line.strip())
-#         pattern = re.compile("\d")
-#         match = re.match(pattern, curr_version_line)
-#         print(match)
+@task(pre=[update_version, test, format_and_lint, docs, notebooks])
+def make(_):
+    """
+    Make all.
+    """
+    print("---------------")
+    print("make successful.")

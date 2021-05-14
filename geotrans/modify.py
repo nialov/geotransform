@@ -3,8 +3,8 @@ Description: WORK IN PROGRESS. NO INTEGRATION.
              Modifies geopandas layers with scripts
 """
 
-import geopandas as gpd
 import click
+import geopandas as gpd
 
 
 def check_for_nan(layer: gpd.GeoDataFrame) -> None:
@@ -28,4 +28,3 @@ def check_and_fix_invalid_geometries(
     """
     # Check for nan in geometry column
     nan_in_geometry = layer.geometry.isna()
-
