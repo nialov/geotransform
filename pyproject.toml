@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geotrans"
-version = "0.0.4.post10.dev0+05e2192"
+version = "0.0.4.post15.dev0+c288a43"
 description = "Switch between spatial fileformats."
 authors = ["nialov <nikolasovaskainen@gmail.com>"]
 readme = "README.rst"
