@@ -33,6 +33,8 @@ SUPPORTS_LAYER_NAMES = [GEOPACKAGE, SHAPEFILE, FILEGEODATABASE]
 
 def load_file(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
     """
+    Load a single geodata file.
+
     Takes a single geodata filepath string, determines its type and returns a
     list of GeoDataFrames and a list of layer
     names that consist of all file data.
@@ -59,8 +61,9 @@ def load_file(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
 
 def check_file(filepath: Path) -> None:
     """
-    Checks that filepath is valid and file is valid but not if its a geodata
-    file.
+    Check that filepath is valid and file is valid.
+
+    But will not check if it is a geodata file.
     """
     # Check that file exists
     if not filepath.exists():
@@ -70,12 +73,11 @@ def check_file(filepath: Path) -> None:
         # Test if directory was a filegeodatabase
         if f".{FILEGEODATABASE}" not in str(filepath):
             raise IsADirectoryError(f"Filepath was a directory: {filepath}")
-    return
 
 
 def determine_filetype(filepath: Path) -> str:
     """
-    Takes a single geodata filepath and determines its geodata type.
+    Take a single geodata filepath and determine its geodata type.
     """
     for filetype in FILETYPES:
         if filetype in str(filepath.suffix):
@@ -136,8 +138,9 @@ def save_files(
     transform_to_type: str,
 ) -> None:
     """
-    The user can save his geodata files with multiple different options.
+    Save given ``geodataframes`` to given output files.
 
+    The user can save his geodata files with multiple different options.
     If a directory is given, the geodata files are saved to that directory
     with the acquired layer names.
     If a single filename is given all geodata is saved to that file and this
@@ -177,6 +180,8 @@ def save_files(
 
 def validate_loaded_geodataframes(geodataframes, layer_names):
     """
+    Validate ``geodataframes`` as they are loaded.
+
     Some columns (namely FID) cause issues when saving to geopackage.
     Currently these columns are removed to remove the issue.
     """

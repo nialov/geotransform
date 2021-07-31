@@ -7,13 +7,7 @@ from typing import Tuple
 import click
 
 import geotrans.transform as transform
-from geotrans.transform import (
-    FILEGEODATABASE,
-    GEOJSON,
-    GEOPACKAGE,
-    SHAPEFILE,
-    driver_dict,
-)
+from geotrans.transform import GEOJSON, GEOPACKAGE, SHAPEFILE
 
 
 @click.command()
@@ -44,8 +38,9 @@ from geotrans.transform import (
 @click.version_option()
 def main(inputs: Tuple[str, ...], transform_to_type: str, output: str):
     """
-    A tool for transforming between spatial geodata filetypes
-    (e.g. ESRI Shapefile, Geopackage).
+    Transform between spatial geodata filetypes.
+
+    e.g. ESRI Shapefile -> Geopackage.
 
     Inputs = File or files to transform to a type.
     Gathers all layers from all input files to the given output.
@@ -66,7 +61,7 @@ def main(inputs: Tuple[str, ...], transform_to_type: str, output: str):
 
 def run_transform(inputs: Tuple[str], transform_to_type: str, output: str):
     """
-    Runs functions in transform.py
+    Run functions in transform.py.
     """
     geodataframes, layer_names = [], []
     for input_filename in inputs:
@@ -159,7 +154,10 @@ def run_transform(inputs: Tuple[str], transform_to_type: str, output: str):
 def validate_inputs(
     inputs: Tuple[str, ...], transform_to_type: str, output: str
 ) -> None:
-    if any([argument is None for argument in (inputs, transform_to_type, output)]):
+    """
+    Validate cli inputs.
+    """
+    if any(argument is None for argument in (inputs, transform_to_type, output)):
         raise TypeError(
             f"None value was passed as an argument.\n"
             f"Values: {inputs, transform_to_type, output}"
@@ -174,13 +172,11 @@ def validate_inputs(
             print("No click runtime detected -> Script has been called from python.")
     if transform_to_type in [SHAPEFILE] and Path(output).is_file():
         if len(inputs) != 1:
-            raise ValueError(f"Shapefiles do not handle multiple layers.")
+            raise ValueError("Shapefiles do not handle multiple layers.")
 
 
 def finished(output):
     """
     Finish up by printing full path to output(s).
     """
-    # TODO: click echo
-    # print(f"Output(s) were written to {output}.")
     click.echo(click.style(f"Layer data was written to {output}.", fg="green"))

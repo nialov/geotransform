@@ -13,6 +13,9 @@ from tests import Helpers
 
 
 def test_validate_inputs():
+    """
+    Test validate_inputs.
+    """
     cli.validate_inputs(Helpers.test_inputs, transform.GEOPACKAGE, Helpers.test_output)
     try:
         cli.validate_inputs("hello", "pretty sure", "this will fail")  # type: ignore
@@ -20,10 +23,11 @@ def test_validate_inputs():
         pass
 
 
-@pytest.mark.parametrize(
-    "inputs,transform_to_type,output", Helpers.test_run_transform_params
-)
-def test_run_transform(inputs, transform_to_type, output, tmp_path: Path):
+@pytest.mark.parametrize("inputs,transform_to_type", Helpers.test_run_transform_params)
+def test_run_transform(inputs, transform_to_type, tmp_path: Path):
+    """
+    Test run_transform.
+    """
     cli.run_transform(inputs, transform_to_type, str(tmp_path))
     for x in tmp_path.iterdir():
         if len(inputs) == 1:
@@ -32,15 +36,16 @@ def test_run_transform(inputs, transform_to_type, output, tmp_path: Path):
             # Test that all column strings match in original geodataframe and
             # the newly made geodataframe
             assert all(
-                [
-                    col1 == col2
-                    for col1, col2 in zip(test_gdf.columns, original_gdf.columns)
-                ]
+                col1 == col2
+                for col1, col2 in zip(test_gdf.columns, original_gdf.columns)
             )
             assert test_gdf.iloc[0, 0] == original_gdf.iloc[0, 0]
 
 
 def test_run_transform_geojson(tmp_path):
+    """
+    Test run_transform_geojson.
+    """
     cli.run_transform(Helpers.test_input_geojson, transform.GEOPACKAGE, tmp_path)
     for x in tmp_path.iterdir():
         assert Path(x).exists()
@@ -49,7 +54,7 @@ def test_run_transform_geojson(tmp_path):
         # Test that all column strings match in original geodataframe and
         # the newly made geodataframe
         assert all(
-            [col1 == col2 for col1, col2 in zip(test_gdf.columns, original_gdf.columns)]
+            col1 == col2 for col1, col2 in zip(test_gdf.columns, original_gdf.columns)
         )
         assert test_gdf.iloc[0, 0] == original_gdf.iloc[0, 0]
         # Remove test files
@@ -62,7 +67,7 @@ def test_run_transform_geojson(tmp_path):
         # Test that all column strings match in original geodataframe and
         # the newly made geodataframe
         assert all(
-            [col1 == col2 for col1, col2 in zip(test_gdf.columns, original_gdf.columns)]
+            col1 == col2 for col1, col2 in zip(test_gdf.columns, original_gdf.columns)
         )
         assert test_gdf.iloc[0, 0] == original_gdf.iloc[0, 0]
         # Remove test files
@@ -134,6 +139,9 @@ def test_command_line_integration_gpkg_to_dir(tmp_path):
 
 
 def test_cli_multilayer_to_folder(tmp_path: Path):
+    """
+    Test cli_multilayer_to_folder.
+    """
     clirunner = CliRunner()
     cli_args = [
         str(Helpers.test_multilayer_file_path),

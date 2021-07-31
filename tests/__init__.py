@@ -1,3 +1,6 @@
+"""
+Tests for ``geotrans``.
+"""
 from pathlib import Path
 
 import pytest
@@ -6,6 +9,10 @@ import geotrans.transform as transform
 
 
 class Helpers:
+
+    """
+    Test parameter helpers.
+    """
 
     test_multilayer_file_path = Path("tests/data/Two_Layer_Geopackage_OG6_OG7.gpkg")
     test_singlelayer_file_path = Path("tests/data/branches_cropped_Domain_IIId.shp")
@@ -40,6 +47,6 @@ class Helpers:
     test_output = "test.gpkg"
 
     test_run_transform_params = [
-        (test_inputs, transform.GEOPACKAGE, test_output),
-        (test_inputs2, transform.GEOPACKAGE, test_output),
+        (test_inputs, transform.GEOPACKAGE),
+        (test_inputs2, transform.GEOPACKAGE),
     ]
