@@ -1,11 +1,12 @@
 # Changes here will be overwritten by Copier
-_commit: c43da8a
+_commit: 5a5d4a6
 _src_path: ../nialov-py-template/
 classifier: 'Topic :: Scientific/Engineering :: GIS'
 description: Switch between spatial fileformats.
 email: nikolasovaskainen@gmail.com
 full_name: Nikolas Ovaskainen
 github_account: nialov
+keyword: data
 keywords: data spatial
 package: geotrans
 year: 2020

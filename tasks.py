@@ -3,9 +3,7 @@ Invoke tasks.
 
 Most tasks employ nox to create a virtual session for testing.
 """
-from invoke import UnexpectedExit, task
-
-NOX_PARALLEL_SESSIONS = ("tests_pip",)
+from invoke import task
 
 PACKAGE_NAME = "geotrans"
 
@@ -26,60 +24,23 @@ def format_and_lint(c):
     c.run("nox --session format_and_lint")
 
 
-@task(pre=[requirements])
-def nox_parallel(c):
-    """
-    Run selected nox test suite sessions in parallel.
-    """
-    # Run asynchronously and collect promises
-    print(f"Running {len(NOX_PARALLEL_SESSIONS)} nox test sessions.")
-    promises = [
-        c.run(
-            f"nox --session {nox_test} --no-color",
-            asynchronous=True,
-            timeout=360,
-        )
-        for nox_test in NOX_PARALLEL_SESSIONS
-    ]
-
-    # Join all promises
-    results = [promise.join() for promise in promises]
-
-    # Check if Result has non-zero exit code (should've already thrown error.)
-    for result in results:
-        if result.exited != 0:
-            raise UnexpectedExit(result)
-
-    # Report to user of success.
-    print(f"{len(results)} nox sessions ran succesfully.")
-
-
 @task
 def update_version(c):
     """
-    Update pyproject.toml version string.
+    Update pyproject.toml and package/__init__.py version strings.
     """
     c.run("nox --session update_version")
 
 
 @task(pre=[requirements, update_version])
-def ci_test(c):
+def ci_test(c, python=""):
     """
     Test suite for continous integration testing.
 
     Installs with pip, tests with pytest and checks coverage with coverage.
     """
-    c.run("nox --session tests_pip")
-
-
-@task(pre=[requirements, nox_parallel])
-def test(_):
-    """
-    Run tests.
-
-    This is an extensive suite. It first tests in current environment and then
-    creates virtual sessions with nox to test installation -> tests.
-    """
+    python_version = "" if len(python) == 0 else f"-p {python}"
+    c.run(f"nox --session tests_pip {python_version}")
 
 
 @task(pre=[requirements, update_version])
@@ -87,6 +48,7 @@ def docs(c):
     """
     Make documentation to docs using nox.
     """
+    print("Making documentation.")
     c.run("nox --session docs")
 
 
@@ -95,10 +57,74 @@ def notebooks(c):
     """
     Execute and fill notebooks.
     """
+    print("Executing and filling notebooks.")
     c.run("nox --session notebooks")
 
 
-@task(pre=[update_version, test, format_and_lint, docs, notebooks])
+@task(pre=[requirements, update_version])
+def build(c):
+    """
+    Build package with poetry.
+    """
+    print("Building package with poetry.")
+    c.run("nox --session build")
+
+
+@task(pre=[requirements])
+def typecheck(c):
+    """
+    Typecheck ``geotrans`` with ``mypy``.
+    """
+    print("Typechecking Python code with mypy.")
+    c.run("nox --session typecheck")
+
+
+@task(pre=[requirements])
+def performance_profile(c):
+    """
+    Profile geotrans performance with ``pyinstrument``.
+    """
+    print("Profiling geotrans performance with pyinstrument.")
+    c.run("nox --session profile_performance")
+
+
+@task(pre=[requirements, update_version, format_and_lint, ci_test, build, docs])
+def prepush(_):
+    """
+    Test suite for locally verifying continous integration results upstream.
+    """
+
+
+@task
+def pre_commit(c, only_run=False, only_install=False):
+    """
+    Verify that pre-commit is installed, install its hooks and run them.
+    """
+    cmd = "pre-commit --help"
+    try:
+        c.run(cmd, hide=True)
+    except Exception:
+        print(f"Could not run '{cmd}'. Make sure pre-commit is installed.")
+        raise
+
+    if not only_run:
+        c.run("pre-commit install")
+        c.run("pre-commit install --hook-type commit-msg")
+        print("Hooks installed!")
+
+    if not only_install:
+        print("Running on all files.")
+        c.run("pre-commit run --all-files")
+
+
+@task(
+    pre=[
+        prepush,
+        notebooks,
+        typecheck,
+        performance_profile,
+    ]
+)
 def make(_):
     """
     Make all.
