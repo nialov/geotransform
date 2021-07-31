@@ -59,7 +59,7 @@ def main(inputs: Tuple[str, ...], transform_to_type: str, output: str):
     run_transform(inputs, transform_to_type, output)
 
 
-def run_transform(inputs: Tuple[str], transform_to_type: str, output: str):
+def run_transform(inputs: Tuple[str, ...], transform_to_type: str, output: str):
     """
     Run functions in transform.py.
     """

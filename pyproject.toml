@@ -24,9 +24,10 @@ include = ["CHANGELOG.md"]
 geotrans = "geotrans.cli:app"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 geopandas = "*"
 click = "*"
+
 # Extras
 # Coverage
 coverage = {version = "*", optional = true}
