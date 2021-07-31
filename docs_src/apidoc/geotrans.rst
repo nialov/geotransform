@@ -8,7 +8,6 @@ Submodules
    :maxdepth: 4
 
    geotrans.cli
-   geotrans.modify
    geotrans.transform
 
 Module contents
