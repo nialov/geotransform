@@ -134,11 +134,11 @@ License
 
 Copyright © 2020, Nikolas Ovaskainen.
 
-.. |Documentation Status| image:: https://readthedocs.org/projects/geotrans/badge/?version=latest
-   :target: https://geotrans.readthedocs.io/en/latest/?badge=latest
+.. |Documentation Status| image:: https://readthedocs.org/projects/geotransform/badge/?version=latest
+   :target: https://geotransform.readthedocs.io/en/latest/?badge=latest
 .. |PyPI Status| image:: https://img.shields.io/pypi/v/geotrans.svg
    :target: https://pypi.python.org/pypi/geotrans
-.. |CI Test| image:: https://github.com/nialov/geotrans/workflows/test-and-publish/badge.svg
-   :target: https://github.com/nialov/geotrans/actions/workflows/test-and-publish.yaml?query=branch%3Amaster
-.. |Coverage| image:: https://raw.githubusercontent.com/nialov/geotrans/master/docs_src/imgs/coverage.svg
-   :target: https://github.com/nialov/geotrans/blob/master/docs_src/imgs/coverage.svg
+.. |CI Test| image:: https://github.com/nialov/geotransform/workflows/test-and-publish/badge.svg
+   :target: https://github.com/nialov/geotransform/actions/workflows/test-and-publish.yaml?query=branch%3Amaster
+.. |Coverage| image:: https://raw.githubusercontent.com/nialov/geotransform/master/docs_src/imgs/coverage.svg
+   :target: https://github.com/nialov/geotransform/blob/master/docs_src/imgs/coverage.svg
