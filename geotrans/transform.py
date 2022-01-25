@@ -47,7 +47,7 @@ def load_file(filepath: Path) -> Tuple[List[gpd.GeoDataFrame], List[str]]:
         # Can contain multiple layers.
         geodataframes, layer_names = load_multilayer(filepath)
     elif filetype in FILETYPES:
-        # Only containts a single layer
+        # Only contains a single layer
         geodataframes, layer_names = load_singlelayer(filepath, filetype)
         assert len(geodataframes) + len(layer_names) == 2
     else:

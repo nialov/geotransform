@@ -45,7 +45,7 @@ def main(inputs: Tuple[str, ...], transform_to_type: str, output: str):
     Inputs = File or files to transform to a type.
     Gathers all layers from all input files to the given output.
 
-    A variable amount of input filenames are accepted, the type to transfrom
+    A variable amount of input filenames are accepted, the type to transform
     the input to can be given and an output file or output directory can be
     given.
 
@@ -129,7 +129,7 @@ def run_transform(inputs: Tuple[str, ...], transform_to_type: str, output: str):
         # If file exists, overwriting is not currently not supported. -> error
         elif Path(output).is_file():
             raise FileExistsError(
-                "Output file already exists. Overwriting curently not possible."
+                "Output file already exists. Overwriting currently not possible."
             )
         # If multilayer data has been read but output filetype does not support
         # multiple layers -> error

@@ -76,55 +76,133 @@ Installation
    cd geotransform
    poetry install
 
-Using geotransform
-------------------
 
-Command line
-~~~~~~~~~~~~
+Formatting and linting
+----------------------
 
-Run
 
-.. code:: bash
-
-   geotrans --help
-
-to print the command line help for the utility.
-
-To transform from a geopackage file with a single layer to an ESRI
-shapefile:
+Formatting & linting:
 
 .. code:: bash
 
-   geotrans input_file.gpkg --to_type shp --output output_file.shp
+   poetry run doit format
+   poetry run doit lint
 
-To transform from a geopackage file with multiple layers to multiple
-ESRI shapefiles into a given directory:
+Building docs
+-------------
+
+Docs can be built locally to test that ``ReadTheDocs`` can also build them:
 
 .. code:: bash
 
-   geotrans input_file.gpkg --to_type shp --output output_dir
+   poetry run doit docs
 
-Python
-~~~~~~
+doit usage
+----------
 
-All main functions in charge of loading and saving geodata files are
-exposed in the transform.py file in the geotrans package.
+To list all available commands from ``dodo.py``:
 
-.. code:: python
+.. code:: bash
 
-   from geotrans.transform import load_file, save_files, SHAPEFILE_DRIVER
-   from pathlib import Path
+   poetry run doit list
 
-   # Your geodata file
-   filepath = Path("input_file.gpkg")
+Development
+~~~~~~~~~~~
 
-   # load_file returns a single or multiple geodataframes depending
-   # on how many layers are in the file.
-   geodataframes, layer_names = load_file(filepath)
+Development dependencies for ``geotrans`` include:
 
-   # Assuming geopackage contained only one layer ->
-   # Save acquired geodataframe and layer
-   save_files(geodataframes, layer_names, [Path("output_file.shp")], SHAPEFILE_DRIVER)
+-  ``poetry``
+
+   -  Used to handle Python package dependencies.
+
+   .. code:: bash
+
+      # Use poetry run to execute poetry installed cli tools such as invoke,
+      # nox and pytest.
+      poetry run <cmd>
+
+
+-  ``doit``
+
+   -  A general task executor that is a replacement for a ``Makefile``
+   -  Understands task dependencies and can run tasks in parallel
+      even while running them in the order determined from dependencies
+      between tasks. E.g. requirements.txt is a requirement for running
+      tests and therefore the task creating requirements.txt will always
+      run before the test task.
+
+   .. code:: bash
+
+      # Tasks are defined in dodo.py
+      # To list doit tasks from command line
+      poetry run doit list
+      # To run all tasks in parallel (recommended before pushing and/or
+      # committing)
+      # 8 is the number of cpu cores, change as wanted
+      # -v 0 sets verbosity to very low. (Errors will always still be printed.)
+      poetry run doit -n 8 -v 0
+
+-  ``nox``
+
+   -  ``nox`` is a replacement for ``tox``. Both are made to create
+      reproducible Python environments for testing, making docs locally, etc.
+
+   .. code:: bash
+
+      # To list available nox sessions
+      # Sessions are defined in noxfile.py
+      poetry run nox --list
+
+-  ``copier``
+
+   -  ``copier`` is a project templater. Many Python projects follow a similar
+      framework for testing, creating documentations and overall placement of
+      files and configuration. ``copier`` allows creating a template project
+      (e.g. https://github.com/nialov/nialov-py-template) which can be firstly
+      cloned as the framework for your own package and secondly to pull updates
+      from the template to your already started project.
+
+   .. code:: bash
+
+      # To pull copier update from github/nialov/nialov-py-template
+      poetry run copier update
+
+
+-  ``pytest``
+
+   -  ``pytest`` is a Python test runner. It is used to run defined tests to
+      check that the package executes as expected. The defined tests in
+      ``./tests`` contain many regression tests (done with
+      ``pytest-regressions``) that make it almost impossible
+      to add features to ``geotrans`` that changes the results of functions
+      and methods.
+
+   .. code:: bash
+
+      # To run tests implemented in ./tests directory and as doctests
+      # within project itself:
+      poetry run pytest
+
+
+-  ``coverage``
+
+   .. code:: bash
+
+      # To check coverage of tests
+      # (Implemented as nox session!)
+      poetry run nox --session test_pip
+
+-  ``sphinx``
+
+   -  Creates documentation from files in ``./docs_src``.
+
+   .. code:: bash
+
+      # To create documentation
+      # (Implemented as nox session!)
+      poetry run nox --session docs
+
+Big thanks to all maintainers of the above packages!
 
 License
 -------
@@ -133,6 +211,9 @@ License
    license. <LICENSE.md>`__
 
 Copyright © 2020, Nikolas Ovaskainen.
+
+-----
+
 
 .. |Documentation Status| image:: https://readthedocs.org/projects/geotransform/badge/?version=latest
    :target: https://geotransform.readthedocs.io/en/latest/?badge=latest

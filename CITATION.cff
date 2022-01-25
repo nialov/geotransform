@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+
+- family-names: Ovaskainen
+  given-names: Nikolas
+title: "geotrans"
+version: "0.0.5.post6.dev0+0331aa5"
+date-released: "2022-01-25"
+keywords:
+  - python
+  - data
+contact:
+  - email: "nikolasovaskainen@gmail.com"
+url: "https://github.com/nialov/geotrans"
+repository-code: "https://github.com/nialov/geotrans"
+
+

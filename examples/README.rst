@@ -1,5 +1,5 @@
 Gallery of geotrans example scripts and/or plots
-=====================================================
+=============================================================================
 
 All matplotlib plots can be saved with:
 

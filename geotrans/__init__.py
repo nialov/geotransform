@@ -4,4 +4,4 @@ geotrans.
 Switch between spatial fileformats.
 """
 
-__version__ = "0.0.5.post4.dev0+ba09777"
+__version__ = "0.0.5.post6.dev0+0331aa5"
