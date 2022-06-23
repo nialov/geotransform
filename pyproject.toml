@@ -24,7 +24,7 @@ include = ["CHANGELOG.md"]
 geotrans = "geotrans.cli:main"
 
 [tool.poetry.dependencies]
-python = "^3.7.1"
+python = "^3.8"
 geopandas = "*"
 click = "<8.1.0"
 
