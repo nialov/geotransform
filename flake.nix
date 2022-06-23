@@ -11,7 +11,7 @@
       mkshell = pkgs:
         let
           poetry-wrapped = pkgs.callPackage ({ writeScriptBin, poetry, stdenv
-            , zlib, cacert, python38, python39, lib, execline }:
+            , zlib, cacert, python38, python39, lib, execline, expat }:
             let
               pythons = [ python38 python39 ];
 
@@ -22,12 +22,13 @@
             in writeScriptBin "poetry" ''
               CLIB="${stdenv.cc.cc.lib}/lib"
               ZLIB="${zlib}/lib"
+              LIBEXPAT="${expat}/lib"
               CERT="${cacert}/etc/ssl/certs/ca-bundle.crt"
 
               export GIT_SSL_CAINFO=$CERT
               export SSL_CERT_FILE=$CERT
               export CURL_CA_BUNDLE=$CERT
-              export LD_LIBRARY_PATH=$CLIB:$ZLIB
+              export LD_LIBRARY_PATH=$CLIB:$ZLIB:$LIBEXPAT
 
               export PYTHONPATH=${site-packages}
               export PATH=${interpreters}:$PATH
