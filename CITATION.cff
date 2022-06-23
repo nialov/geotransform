@@ -5,8 +5,8 @@ authors:
 - family-names: Ovaskainen
   given-names: Nikolas
 title: "geotrans"
-version: "0.0.5.post8.dev0+1b6ee82"
-date-released: "2022-03-31"
+version: "0.0.5.post9.dev0+7ee8c41"
+date-released: "2022-06-23"
 keywords:
   - python
   - data
@@ -14,6 +14,7 @@ contact:
   - email: "nikolasovaskainen@gmail.com"
 url: "https://github.com/nialov/geotrans"
 repository-code: "https://github.com/nialov/geotrans"
+
 
 
 
