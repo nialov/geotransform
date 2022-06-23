@@ -15,7 +15,7 @@ dev/
 
 # We do not want to include requirements.txt
 # It is merely for backwards compatible pip installs
-requirements.txt
+/requirements.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -155,5 +155,12 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# doit cache
 .doit.db
+
+# direnv cache
 .direnv
+
+# direnv rc. it is created by nix develop
+.envrc

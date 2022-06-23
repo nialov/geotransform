@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: 01e18e2
+_commit: b9818e1
 _src_path: ../nialov-py-template/
 classifier: 'Topic :: Scientific/Engineering :: GIS'
 description: Switch between spatial fileformats.

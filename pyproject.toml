@@ -41,18 +41,17 @@ sphinx-gallery = {version = "*", optional = true}
 sphinx-autodoc-typehints = {version = "*", optional = true}
 sphinx-autobuild = {version = "*", optional = true}
 
-# Linting and formatting
+# Linting
 pylint = {version = "*", optional = true}
 rstcheck = {version = "*", optional = true}
-black = {version = "*", optional = true, extras = ["jupyter"]}
-blacken-docs = {version = "*", optional = true}
-blackdoc = {version = "*", optional = true}
-isort = {version = "*", optional = true}
+markupsafe = {version = "2.0.1", optional = true}
 
 # Typecheck
 mypy = {version = "*", optional = true}
 
 [tool.poetry.dev-dependencies]
+# TODO: copier could be installed outside the poetry environment
+copier = "*"
 doit = "*"
 ipython = "^7.0"
 jupyterlab = "*"
@@ -71,14 +70,11 @@ docs = [
     "sphinx-autodoc-typehints",
     "sphinx-autobuild"
 ]
-format-lint = [
+lint = [
     "pylint",
     "rstcheck",
     "sphinx",
-    "black",
-    "isort",
-    "blacken-docs",
-    "blackdoc"
+    "markupsafe",
 ]
 typecheck = ["mypy"]
 
@@ -108,7 +104,7 @@ testpaths =[
     "tests",
     "geotrans",
     ]
-addopts = "--doctest-modules --pdbcls=IPython.terminal.debugger:Pdb"
+addopts = "--doctest-modules"
 doctest_optionflags =[
     "NUMBER",
     "NORMALIZE_WHITESPACE",

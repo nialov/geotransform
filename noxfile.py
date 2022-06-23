@@ -75,8 +75,8 @@ def install_dev(session, extras: str = ""):
     """
     Install all package and dev dependencies.
     """
-    session.install(f".{extras}")
     session.install("-r", str(DEV_REQUIREMENTS_PATH))
+    session.install(f".{extras}")
 
 
 @nox.session(python=PYTHON_VERSIONS, reuse_venv=True, **VENV_PARAMS)
@@ -147,15 +147,21 @@ def notebooks(session):
         print("No notebooks found.")
         return
 
+    # Remove .ipynb_checkpoints directories
+    for checkpoints_dir in NOTEBOOKS_PATH.rglob(".ipynb_checkpoints/"):
+        rmtree(checkpoints_dir)
+
     # Install dev dependencies
     install_dev(session=session)
 
     # Test notebook(s)
     for notebook_path in NOTEBOOKS:
-        execute_notebook(session=session, notebook=notebook_path)
+        if notebook_path.exists():
+            # Might have been removed by .ipynb_checkpoints rmtree!
+            execute_notebook(session=session, notebook=notebook_path)
 
 
-def setup_format_and_lint(session) -> List[str]:
+def setup_lint(session) -> List[str]:
     existing_paths = filter_paths_to_existing(
         Path(PACKAGE_NAME),
         TESTS_PATH,
@@ -165,42 +171,9 @@ def setup_format_and_lint(session) -> List[str]:
         DOCS_EXAMPLES_PATH,
     )
 
-    if len(existing_paths) == 0:
-        print("Nothing to format.")
-
-    # Install formatting and lint dependencies
-    install_dev(session=session, extras="[format-lint]")
+    # Install lint dependencies
+    install_dev(session=session, extras="[lint]")
     return [str(path) for path in existing_paths]
-
-
-@nox.session(reuse_venv=True, **VENV_PARAMS)
-def format(session):
-    """
-    Format python files, notebooks and docs_src.
-    """
-    existing_paths = setup_format_and_lint(session=session)
-
-    # Format python files
-    session.run("black", *existing_paths)
-
-    # Format python file imports
-    session.run(
-        "isort",
-        *existing_paths,
-    )
-
-    # Format notebooks with black (must be installed with black[jupyter])
-    for notebook in NOTEBOOKS:
-        session.run("black", str(notebook))
-
-    # Format code blocks in documentation files
-    session.run("blacken-docs", *[str(path) for path in DOCS_FILES], str(README_PATH))
-
-    # Format code blocks in Python files
-    session.run(
-        "blackdoc",
-        *existing_paths,
-    )
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, reuse_venv=True, **VENV_PARAMS)
@@ -208,7 +181,7 @@ def lint(session):
     """
     Lint python files, notebooks and docs_src.
     """
-    existing_paths = setup_format_and_lint(session=session)
+    existing_paths = setup_lint(session=session)
 
     # Lint docs
     session.run(
@@ -217,89 +190,6 @@ def lint(session):
         "docs_src",
         "--ignore-directives",
         "automodule",
-    )
-
-    # Lint Python files with black (all should be formatted.)
-    session.run("black", "--check", *existing_paths)
-
-    for notebook in NOTEBOOKS:
-        # Lint notebooks with black (all should be formatted.)
-        session.run("black", "--check", str(notebook))
-
-    # Lint imports
-    session.run(
-        "isort",
-        "--check-only",
-        *existing_paths,
-    )
-
-    # Lint with pylint
-    session.run(
-        "pylint",
-        *existing_paths,
-    )
-
-
-@nox.session(python=DEFAULT_PYTHON_VERSION, reuse_venv=True, **VENV_PARAMS)
-def format_and_lint(session):
-    """
-    Format and lint python files, notebooks and docs_src.
-    """
-    existing_paths = setup_format_and_lint(session=session)
-
-    if len(existing_paths) == 0:
-        print("Nothing to format or lint.")
-        return
-
-    # Install formatting and lint dependencies
-    install_dev(session=session, extras="[format-lint]")
-
-    # Format python files
-    session.run("black", *existing_paths)
-
-    # Format python file imports
-    session.run(
-        "isort",
-        *existing_paths,
-    )
-
-    # Format notebooks with black (must be installed with black[jupyter])
-    for notebook in NOTEBOOKS:
-        session.run("black", str(notebook))
-
-    # Format code blocks in documentation files
-    session.run(
-        "blacken-docs",
-        README_PATH,
-        *[str(path) for path in DOCS_FILES],
-    )
-
-    # Format code blocks in Python files
-    session.run(
-        "blackdoc",
-        *existing_paths,
-    )
-
-    # Lint docs
-    session.run(
-        "rstcheck",
-        "-r",
-        "docs_src",
-        "--ignore-directives",
-        "automodule",
-    )
-
-    # Lint Python files with black (all should be formatted.)
-    session.run("black", "--check", *existing_paths)
-
-    for notebook in NOTEBOOKS:
-        # Lint notebooks with black (all should be formatted.)
-        session.run("black", "--check", str(notebook))
-
-    session.run(
-        "isort",
-        "--check-only",
-        *existing_paths,
     )
 
     # Lint with pylint
@@ -372,7 +262,6 @@ def _docs(session, auto_build: bool):
             str(DOCS_PATH),
             *(
                 [
-                    "--open-browser",
                     f"--ignore=**/{DOCS_AUTO_EXAMPLES_PATH.name}/**",
                     "--watch=README.rst",
                     f"--watch={PACKAGE_NAME}/",
@@ -476,7 +365,7 @@ def typecheck(session):
     # Install package and typecheck dependencies
     install_dev(session=session, extras="[typecheck]")
 
-    # Format python files
+    # Typecheck python files
     session.run("mypy", PACKAGE_NAME)
 
 
@@ -544,7 +433,10 @@ def changelog(session):
         print("Expected 'pandoc' to be installed. Cannot generate clean changelog.")
 
     # Install auto-changelog from own repo
-    session.install("git+https://github.com/nialov/auto-changelog.git")
+    # TODO: markupsafe breakage with 2.1.0
+    session.install(
+        "git+https://github.com/nialov/auto-changelog.git", "markupsafe==2.0.1"
+    )
     session.run(
         "auto-changelog",
         "--tag-prefix=v",
@@ -577,7 +469,7 @@ def changelog(session):
     assert changelog_path.exists()
 
 
-@nox.session(reuse_venv=True, **VENV_PARAMS)
+@nox.session(python=DEFAULT_PYTHON_VERSION, reuse_venv=True, **VENV_PARAMS)
 def codespell(session):
     """
     Check spelling in code.
