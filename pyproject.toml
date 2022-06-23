@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geotrans"
-version = "0.0.5.post9.dev0+7ee8c41"
+version = "0.0.5.post13.dev0+b7e92de"
 description = "Switch between spatial fileformats."
 authors = ["nialov <nikolasovaskainen@gmail.com>"]
 readme = "README.rst"
@@ -24,7 +24,7 @@ include = ["CHANGELOG.md"]
 geotrans = "geotrans.cli:main"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8,<3.9"
 geopandas = "*"
 click = "<8.1.0"
 
