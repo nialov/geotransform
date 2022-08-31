@@ -3,6 +3,14 @@ Geotransformations Python Command Line Utility
 
 |Documentation Status| |PyPI Status| |CI Test| |Coverage|
 
+Current state
+-------------
+
+Currently archived as I have personally switched to just using
+``ogr2ogr`` from ``gdal``. It has a difficult ``API`` on the
+command-line but it implements such a vast array of functionality that
+it is worth just learning.
+
 Documentation
 -------------
 
